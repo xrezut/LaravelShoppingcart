@@ -17,66 +17,66 @@ Führe dazu das `require` Kommando von composer in einem Terminal aus:
     composer require bumbummen99/shoppingcart
 
 Dies sollte genügen um das Paket zu installieren.
+'
+**Dieses Paket verwendet ab Version 2 die 'Dependency Discovery'-Funktionalität von Laravel**
 
-**As of version 2 of this package it's possibly to use dependency injection to inject an instance of the Cart class into your controller or other class**
+## Übersicht
+Schau dir die folgenden Themen an um mehr über die Funktionalität von LaravelShoppingcart zu erfahren.
 
-## Overview
-Look at one of the following topics to learn more about LaravelShoppingcart
-
-* [Usage](#usage)
+* [Benutzung](#benutzung)
 * [Collections](#collections)
-* [Instances](#instances)
-* [Models](#models)
-* [Database](#database)
+* [Instanzen](#instances)
+* [Modelle](#models)
+* [Datenbank](#database)
 * [Exceptions](#exceptions)
 * [Events](#events)
-* [Example](#example)
+* [Beispiel](#example)
 
-## Usage
+## Benutzung
 
-The shoppingcart gives you the following methods to use:
+Der Warenkorb, im folgenden Cart genannt, bietet folgende Methoden:
 
 ### Cart::add()
 
-Adding an item to the cart is really simple, you just use the `add()` method, which accepts a variety of parameters.
+Das hinzufügen von Posten zum Warenkorb ist sehr einfach da bereits ein Aufruf der Methode `add()`, welche verschiedene Parameter akzeptiert, genügt.
 
-In its most basic form you can specify the id, name, quantity, price and weight of the product you'd like to add to the cart.
+In der einfachsten Form können Id, Name, Stückzahl, Preis und Gewicht des hinzuzufügenden Produktes spezifiziert werden.
 
 ```php
 Cart::add('293ad', 'Product 1', 1, 9.99, 550);
 ```
 
-As an optional fifth parameter you can pass it options, so you can add multiple items with the same id, but with (for instance) a different size.
+Als optionalen, fünften Parameter lässt sich ein Array mit optionen hinzufügen. Posten, welche die gleichen Parameter mit unterschiedlichen Optionen besitzen, werden als unterschiedliche Posten verarbeitet. Beispielweise liese sich so die Größe des Produktes hinzufügen.
 
 ```php
 Cart::add('293ad', 'Product 1', 1, 9.99, 550, ['size' => 'large']);
 ```
 
-**The `add()` method will return an CartItem instance of the item you just added to the cart.**
+**Die `add()` Methode gibt die Instanz des CartItems zurück welche intern erstellt wurde.**
 
-Maybe you prefer to add the item using an array? As long as the array contains the required keys, you can pass it to the method. The options key is optional.
+Möchtest du die Posten lieber als Array hinzufügen? So lange das Array alle benötigten Schlüssel enthält kann es in der Methode verwendet werden. Der options-Schlüssel ist optional.
 
 ```php
 Cart::add(['id' => '293ad', 'name' => 'Product 1', 'qty' => 1, 'price' => 9.99, 'weight' => 550, 'options' => ['size' => 'large']]);
 ```
 
-New in version 2 of the package is the possibility to work with the [Buyable](#buyable) interface. The way this works is that you have a model implement the [Buyable](#buyable) interface, which will make you implement a few methods so the package knows how to get the id, name and price from your model. 
-This way you can just pass the `add()` method a model and the quantity and it will automatically add it to the cart. 
+Eine Neuerung von Version 2 umfasst die Möglichkeit das [Buyable](#buyable) interface zu verwenden. Dieses stellt einige Methoden für das zu verwendende Modell, z.B. 'Produkt', bereit welche dem Paket den Zugriff auf die Benötigten Daten erlauben.
+Dies ermöglicht den Aufruf der `add()` Methode mit einem Modell und der Stückzahl als Parameter, weitere Parameter werden intern aus dem Modell geladen.
 
-**As an added bonus it will automatically associate the model with the CartItem**
+**Zusätzlich wird das verwendete Modell mit der CartItem-Instanz assoiziert**
 
 ```php
 Cart::add($product, 1, ['size' => 'large']);
 ```
-As an optional third parameter you can add options.
+Optionen lassen sich als dritter, optionaler Parameter spezifizieren.
 ```php
 Cart::add($product, 1, ['size' => 'large']);
 ```
 
-Finally, you can also add multipe items to the cart at once.
-You can just pass the `add()` method an array of arrays, or an array of Buyables and they will be added to the cart. 
+Abschliesend ist es ebenfalls möglich mehrere Posten gleichzeitig hinzuzufügen.  
+Hierfür wird der `add()` Methode einfach ein Array von Arrays oder ein Array von Buyables übergeben.
 
-**When adding multiple items to the cart, the `add()` method will return an array of CartItems.**
+**Beim hinzufügen von mehreren Posten wird die `add()` Methode ein Array von CartItems zurückgeben.**
 
 ```php
 Cart::add([
@@ -90,10 +90,9 @@ Cart::add([$product1, $product2]);
 
 ### Cart::update()
 
-To update an item in the cart, you'll first need the rowId of the item.
-Next you can use the `update()` method to update it.
+Um einen Posten in der Cart zu updaten wird die dazugehörige rowId benötigt. Diese stellt den unique identifier des CartItems dar. Mit diesem lässt sich das CartItem, über die `update()` Methode, modifizieren.
 
-If you simply want to update the quantity, you'll pass the update method the rowId and the new quantity:
+Um die Stückzahl zu modifizieren muss die `update()` Methode mit der rowId und der neuen Stückzahl aufgerufen werden:
 
 ```php
 $rowId = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
@@ -101,7 +100,7 @@ $rowId = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
 Cart::update($rowId, 2); // Will update the quantity
 ```
 
-If you want to update more attributes of the item, you can either pass the update method an array or a `Buyable` as the second parameter. This way you can update all information of the item with the given rowId.
+Falls mehrere Attribute des Postens modifiziert werden sollen kann der `update()` Methode auch ein Array oder eine Buyable-Instanz übergeben werden.
 
 ```php
 Cart::update($rowId, ['name' => 'Product 1']); // Will update the name
@@ -112,7 +111,7 @@ Cart::update($rowId, $product); // Will update the id, name and price
 
 ### Cart::remove()
 
-To remove an item for the cart, you'll again need the rowId. This rowId you simply pass to the `remove()` method and it will remove the item from the cart.
+Um einen Posten aus dem Warenkorb zu entfernen wird erneut die rowId benötigt. Diese muss einfach der `remove()` Methode übergeben werden.
 
 ```php
 $rowId = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
@@ -122,7 +121,7 @@ Cart::remove($rowId);
 
 ### Cart::get()
 
-If you want to get an item from the cart using its rowId, you can simply call the `get()` method on the cart and pass it the rowId.
+Um die CartItem-Instanz eines Postens aus dem Warenkorb zu erhalten wird ebenfalls dessen rowId benötigt. Diese kann einfach der `get()` Methode übergeben werden.
 
 ```php
 $rowId = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
@@ -132,13 +131,13 @@ Cart::get($rowId);
 
 ### Cart::content()
 
-Of course you also want to get the carts content. This is where you'll use the `content` method. This method will return a Collection of CartItems which you can iterate over and show the content to your customers.
+Um den gesamten Inhalt des Warenkorbs zu erhalten wird die `content()` Methode verwendet. Diese Methode gibt eine iterierbare Collection von CartItem-Instanzen zurück welche beispielweise zur Anzeige in einem User Interface verwendet werden kann.
 
 ```php
 Cart::content();
 ```
 
-This method will return the content of the current cart instance, if you want the content of another instance, simply chain the calls.
+Diese Methode gibt außerdem lediglich den Inhalt der aktuellen Warenkorb-Instanz zurück. Um den Inhalt einer anderen Instanz zu erhalten lassen sich die Methoden-Aufrufe einfach verketten.
 
 ```php
 Cart::instance('wishlist')->content();
@@ -146,7 +145,7 @@ Cart::instance('wishlist')->content();
 
 ### Cart::destroy()
 
-If you want to completely remove the content of a cart, you can call the destroy method on the cart. This will remove all CartItems from the cart for the current cart instance.
+Um eine Warenkorb-Instanz zu löschen und deren Inhalt zu verwerfen muss die `destory()` Methode aufgerufen werden. Diese wird alle Posten aus der aktuellen Warenkorb-Instanz entfernen.
 
 ```php
 Cart::destroy();
@@ -154,21 +153,21 @@ Cart::destroy();
 
 ### Cart::weight()
 
-The `weight()` method can be used to get the weight total of all items in the cart, given there weight and quantity.
+Die `weight()` Methode wird dazu verwendet um das Gewicht aller Posten, unter Berücksichtigung von Gewicht und Stückzahl, im Warenkorb zu erhalten.
 
 ```php
 Cart::weight();
 ```
 
-The method will automatically format the result, which you can tweak using the three optional parameters
+Der Rückgabewert dieser Methode wird automatisch formatiert. Die Formatierung kann mit Hilfe der Parameter dieser Methode angepasst werden.
 
 ```php
 Cart::weight($decimals, $decimalSeperator, $thousandSeperator);
 ```
 
-You can set the default number format in the config file.
+Die Standard-Werte dieser Parameter lassen sich in der enthaltenen Konfigurationsdatei anpassen.
 
-**If you're not using the Facade, but use dependency injection in your (for instance) Controller, you can also simply get the total property `$cart->weight`**
+**Falls statt der Facade die Dependency Injection verwendet wird, lässt sich auf diese auch als Parameter zugreifen `$cart->weight`**
 
 ### Cart::total()
 
