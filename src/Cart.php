@@ -84,11 +84,11 @@ class Cart
     /**
      * Set the current cart instance.
      *
-     * @param string|null $instance
+     * @param string|InstanceIdentifier|null $instance
      *
      * @return \Gloudemans\Shoppingcart\Cart
      */
-    public function instance(?string $instance = null)
+    public function instance($instance = null)
     {
         $instance = $instance ?: self::DEFAULT_INSTANCE;
 
