@@ -1453,7 +1453,7 @@ class CartTest extends TestCase
 
             $this->assertEquals('0', $cart2->countItems());
 
-            $cart2->merge('test', null, null, false);
+            $cart2->merge('test', false, false, false);
 
             Event::assertNotDispatched('cart.added');
             Event::assertDispatched('cart.merged');
