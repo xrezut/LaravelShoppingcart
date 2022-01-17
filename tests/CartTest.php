@@ -244,19 +244,6 @@ class CartTest extends TestCase
     /**
      * @test
      */
-    public function it_will_validate_the_name()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Please supply a valid name.');
-
-        $cart = $this->getCart();
-
-        $cart->add(1, null, 1, 10.00);
-    }
-
-    /**
-     * @test
-     */
     public function it_will_validate_the_quantity()
     {
         $this->expectException(\InvalidArgumentException::class);
