@@ -11,7 +11,7 @@ class CartItemOptions extends Collection
      *
      * @return mixed
      */
-    public function __get(string $key)
+    public function __get($key)
     {
         return $this->get($key);
     }
