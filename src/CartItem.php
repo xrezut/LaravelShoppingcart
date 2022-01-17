@@ -513,9 +513,9 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return string
      */
-    public function toJson(int $flags = 0)
+    public function toJson($options = 0)
     {
-        return json_encode($this->toArray(), $flags);
+        return json_encode($this->toArray(), $options);
     }
 
     /**
