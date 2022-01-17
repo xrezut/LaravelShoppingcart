@@ -13,10 +13,8 @@ interface Buyable
 
     /**
      * Get the description or title of the Buyable item.
-     *
-     * @return string
      */
-    public function getBuyableDescription();
+    public function getBuyableDescription() : ?string;
 
     /**
      * Get the price of the Buyable item.
