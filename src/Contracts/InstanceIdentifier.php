@@ -2,6 +2,8 @@
 
 namespace Gloudemans\Shoppingcart\Contracts;
 
+use Money\Money;
+
 interface InstanceIdentifier
 {
     /**
@@ -16,5 +18,5 @@ interface InstanceIdentifier
      *
      * @return int|string
      */
-    public function getInstanceGlobalDiscount();
+    public function getInstanceGlobalDiscount() : Money;
 }
