@@ -11,11 +11,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.4', '8.0', '8.1']
-        laravel-versions: ['5.4.*', '5.5.*', '5.6.*', '5.7.*', '5.8.*', '^6.0', '^7.0', '^8.0']
+        php-version: ['7.4', '8.0', '8.1']
+        laravel-version: ['5.4.*', '5.5.*', '5.6.*', '5.7.*', '5.8.*', '^6.0', '^7.0', '^8.0']
+    name: PHP ${{ matrix.php-version }} - Laravel ${{ matrix.laravel-version }}
     env:
       PHP_VERSION: ${{ matrix.php-versions }}
-    name: PHP ${{ matrix.php-versions }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -23,13 +23,13 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
         env:
           runner: ubuntu-18.04
           
       - name: Use appropiate Laravel version
         run: |
-             composer require "laravel/framework:${{ matrix.laravel-versions }}" --no-interaction --no-update
+             composer require "laravel/framework:${{ matrix.laravel-version }}" --no-interaction --no-update
 
       - name: Validate composer.json and composer.lock
         run: composer validate
