@@ -33,7 +33,7 @@ class BuyableProduct extends Model implements Buyable
      *
      * @return int|string
      */
-    public function getBuyableIdentifier($options = null)
+    public function getBuyableIdentifier()
     {
         return $this->id;
     }
@@ -43,7 +43,7 @@ class BuyableProduct extends Model implements Buyable
      *
      * @return string
      */
-    public function getBuyableDescription($options = null)
+    public function getBuyableDescription() : ?string
     {
         return $this->name;
     }
@@ -53,7 +53,7 @@ class BuyableProduct extends Model implements Buyable
      *
      * @return float
      */
-    public function getBuyablePrice($options = null)
+    public function getBuyablePrice()
     {
         return $this->price;
     }
@@ -63,7 +63,7 @@ class BuyableProduct extends Model implements Buyable
      *
      * @return float
      */
-    public function getBuyableWeight($options = null)
+    public function getBuyableWeight()
     {
         return $this->weight;
     }
