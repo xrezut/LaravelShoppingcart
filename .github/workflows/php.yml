@@ -12,6 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: ['7.4', '8.0', '8.1']
+        laravel-versions: ['5.4.*', '5.5.*', '5.6.*', '5.7.*', '5.8.*', '^6.0', '^7.0', '^8.0']
     env:
       PHP_VERSION: ${{ matrix.php-versions }}
     name: PHP ${{ matrix.php-versions }}
@@ -25,6 +26,10 @@ jobs:
           php-version: ${{ matrix.php-versions }}
         env:
           runner: ubuntu-18.04
+          
+      - name: Use appropiate Laravel version
+        run: |
+             composer require "laravel/framework:${{ matrix.php-versions }}" "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
 
       - name: Validate composer.json and composer.lock
         run: composer validate
