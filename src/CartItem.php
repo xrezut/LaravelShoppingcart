@@ -51,7 +51,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @var string
      */
-    public $name;
+    public string $name;
 
     /**
      * The price without TAX of the cart item.
@@ -107,7 +107,7 @@ class CartItem implements Arrayable, Jsonable
      * @param float      $weight
      * @param array      $options
      */
-    public function __construct($id, $name, $price, $weight = 0, array $options = [])
+    public function __construct($id, string $name, $price, $weight = 0, array $options = [])
     {
         if (empty($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
@@ -239,7 +239,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return string
      */
-    public function taxTotal($decimals = null, $decimalPoint = null, $thousandSeperator = null)
+    public function taxTotal(?int $decimals = null, ?string $decimalPoint = null, ?string $thousandSeperator = null)
     {
         return $this->numberFormat($this->taxTotal, $decimals, $decimalPoint, $thousandSeperator);
     }
@@ -253,7 +253,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return string
      */
-    public function discount($decimals = null, $decimalPoint = null, $thousandSeperator = null)
+    public function discount(?int $decimals = null, ?string $decimalPoint = null, ?string $thousandSeperator = null)
     {
         return $this->numberFormat($this->discount, $decimals, $decimalPoint, $thousandSeperator);
     }
@@ -267,7 +267,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return string
      */
-    public function discountTotal($decimals = null, $decimalPoint = null, $thousandSeperator = null)
+    public function discountTotal(?int $decimals = null, ?string $decimalPoint = null, ?string $thousandSeperator = null)
     {
         return $this->numberFormat($this->discountTotal, $decimals, $decimalPoint, $thousandSeperator);
     }
@@ -281,7 +281,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return string
      */
-    public function priceTotal($decimals = null, $decimalPoint = null, $thousandSeperator = null)
+    public function priceTotal(?int $decimals = null, ?string $decimalPoint = null, ?string $thousandSeperator = null)
     {
         return $this->numberFormat($this->priceTotal, $decimals, $decimalPoint, $thousandSeperator);
     }
