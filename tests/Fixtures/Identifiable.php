@@ -34,7 +34,7 @@ class Identifiable implements InstanceIdentifier
      *
      * @return int|string
      */
-    public function getInstanceIdentifier($options = null)
+    public function getInstanceIdentifier()
     {
         return $this->identifier;
     }
@@ -44,7 +44,7 @@ class Identifiable implements InstanceIdentifier
      *
      * @return int|string
      */
-    public function getInstanceGlobalDiscount($options = null)
+    public function getInstanceGlobalDiscount()
     {
         return $this->discountRate;
     }
