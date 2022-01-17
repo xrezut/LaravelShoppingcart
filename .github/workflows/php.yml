@@ -29,7 +29,7 @@ jobs:
           
       - name: Use appropiate Laravel version
         run: |
-             composer require "laravel/framework:${{ matrix.php-versions }}" --no-interaction --no-update
+             composer require "laravel/framework:${{ matrix.laravel-versions }}" --no-interaction --no-update
 
       - name: Validate composer.json and composer.lock
         run: composer validate
