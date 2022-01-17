@@ -9,6 +9,7 @@ use Gloudemans\Shoppingcart\Exceptions\InvalidCalculatorException;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
+use Money\Money;
 use ReflectionClass;
 
 /**
@@ -27,10 +28,8 @@ class CartItem implements Arrayable, Jsonable
 {
     /**
      * The rowID of the cart item.
-     *
-     * @var string
      */
-    public $rowId;
+    public string $rowId;
 
     /**
      * The ID of the cart item.
@@ -55,10 +54,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * The price without TAX of the cart item.
-     *
-     * @var float
      */
-    public $price;
+    public Money $price;
 
     /**
      * The weight of the product.
@@ -74,10 +71,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * The tax rate for the cart item.
-     *
-     * @var int|float
      */
-    public $taxRate = 0;
+    public float $taxRate = 0;
 
     /**
      * The FQN of the associated model.
@@ -88,10 +83,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * The discount rate for the cart item.
-     *
-     * @var float
      */
-    private $discountRate = 0;
+    private Money $discount = 0;
 
     /**
      * The cart instance of the cart item.
@@ -107,25 +100,16 @@ class CartItem implements Arrayable, Jsonable
      * @param float      $weight
      * @param array      $options
      */
-    public function __construct($id, string $name, $price, $weight = 0, array $options = [])
+    public function __construct($id, string $name, Money $price, int $weight = 0, array $options = [])
     {
-        if (empty($id)) {
+        if (!is_string($id) && !is_int($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
-        }
-        if (empty($name)) {
-            throw new \InvalidArgumentException('Please supply a valid name.');
-        }
-        if (strlen($price) < 0 || !is_numeric($price)) {
-            throw new \InvalidArgumentException('Please supply a valid price.');
-        }
-        if (strlen($weight) < 0 || !is_numeric($weight)) {
-            throw new \InvalidArgumentException('Please supply a valid weight.');
         }
 
         $this->id = $id;
         $this->name = $name;
-        $this->price = floatval($price);
-        $this->weight = floatval($weight);
+        $this->price = $price;
+        $this->weight = $weight;
         $this->options = new CartItemOptions($options);
         $this->rowId = $this->generateRowId($id, $options);
     }
@@ -340,7 +324,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function associate($model)
+    public function associate($model) : self
     {
         $this->associatedModel = is_string($model) ? $model : get_class($model);
 
@@ -354,7 +338,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function setTaxRate($taxRate)
+    public function setTaxRate($taxRate) : self
     {
         $this->taxRate = $taxRate;
 
@@ -363,14 +347,10 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Set the discount rate.
-     *
-     * @param int|float $discountRate
-     *
-     * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function setDiscountRate($discountRate)
+    public function setDiscount(Money $discount) : self
     {
-        $this->discountRate = $discountRate;
+        $this->discount = $discount;
 
         return $this;
     }
@@ -382,11 +362,20 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function setInstance(?string $instance)
+    public function setInstance(?string $instance) : self
     {
         $this->instance = $instance;
 
         return $this;
+    }
+    
+    /**
+     * Getter for the raw internal discount rate.
+     * Should be used in calculators.
+     */
+    public function getDiscount() : Money
+    {
+        return $this->discount;
     }
 
     /**
@@ -434,7 +423,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public static function fromBuyable(Buyable $item, array $options = [])
+    public static function fromBuyable(Buyable $item, array $options = []) : self
     {
         return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $item->getBuyableWeight($options), $options);
     }
@@ -446,7 +435,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public static function fromArray(array $attributes)
+    public static function fromArray(array $attributes) : self
     {
         $options = Arr::get($attributes, 'options', []);
 
@@ -463,24 +452,9 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public static function fromAttributes($id, string $name, $price, $weight, array $options = [])
+    public static function fromAttributes($id, string $name, Money $price, $weight, array $options = []) : self
     {
         return new self($id, $name, $price, $weight, $options);
-    }
-
-    /**
-     * Generate a unique id for the cart item.
-     *
-     * @param string $id
-     * @param array  $options
-     *
-     * @return string
-     */
-    protected function generateRowId($id, array $options)
-    {
-        ksort($options);
-
-        return md5($id.serialize($options));
     }
 
     /**
@@ -497,9 +471,7 @@ class CartItem implements Arrayable, Jsonable
             'qty'      => $this->qty,
             'price'    => $this->price,
             'weight'   => $this->weight,
-            'options'  => is_object($this->options)
-                ? $this->options->toArray()
-                : $this->options,
+            'options'  => $this->options->toArray(),
             'discount' => $this->discount,
             'tax'      => $this->tax,
             'subtotal' => $this->subtotal,
@@ -517,6 +489,21 @@ class CartItem implements Arrayable, Jsonable
     {
         return json_encode($this->toArray(), $options);
     }
+    
+    /**
+     * Generate a unique id for the cart item.
+     *
+     * @param string $id
+     * @param array  $options
+     *
+     * @return string
+     */
+    protected function generateRowId(string $id, array $options) : string
+    {
+        ksort($options);
+
+        return md5($id.serialize($options));
+    }
 
     /**
      * Get the formatted number.
@@ -528,7 +515,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return string
      */
-    private function numberFormat($value, ?int $decimals, ?string $decimalPoint, ?string $thousandSeperator)
+    private function numberFormat($value, ?int $decimals, ?string $decimalPoint, ?string $thousandSeperator) : string
     {
         if (is_null($decimals)) {
             $decimals = config('cart.format.decimals', 2);
@@ -543,16 +530,5 @@ class CartItem implements Arrayable, Jsonable
         }
 
         return number_format($value, $decimals, $decimalPoint, $thousandSeperator);
-    }
-
-    /**
-     * Getter for the raw internal discount rate.
-     * Should be used in calculators.
-     *
-     * @return float
-     */
-    public function getDiscountRate()
-    {
-        return $this->discountRate;
     }
 }
