@@ -54,10 +54,8 @@ class Cart
 
     /**
      * Defines the discount percentage.
-     *
-     * @var float
      */
-    private $discount = 0;
+    private ?Money $discount = null;
 
     /**
      * Defines the tax rate.
@@ -124,7 +122,7 @@ class Cart
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function add($id, ?string $name = null, $qty = null, $price = null, $weight = 0, array $options = [])
+    public function add($id, ?string $name = null, $qty = null, ?Money $price = null, $weight = 0, array $options = [])
     {
         if ($this->isMulti($id)) {
             return array_map(function ($item) {
@@ -751,7 +749,7 @@ class Cart
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    private function createCartItem($id, ?string $name = null, $qty, $price, $weight, array $options) : CartItem
+    private function createCartItem($id, ?string $name = null, int $qty, ?Money $price = null, int $weight = 0, array $options = []) : CartItem
     {
         if ($id instanceof Buyable) {
             $cartItem = CartItem::fromBuyable($id, $qty ?: []);
@@ -777,7 +775,7 @@ class Cart
      *
      * @return bool
      */
-    private function isMulti($item)
+    private function isMulti($item) : bool
     {
         if (!is_array($item)) {
             return false;
@@ -791,7 +789,7 @@ class Cart
      *
      * @return bool
      */
-    private function storedCartInstanceWithIdentifierExists($instance, $identifier)
+    private function storedCartInstanceWithIdentifierExists(string $instance, string $identifier) : bool
     {
         return $this->getConnection()->table($this->getTableName())->where(['identifier' => $identifier, 'instance'=> $instance])->exists();
     }
@@ -811,7 +809,7 @@ class Cart
      *
      * @return string
      */
-    private function getTableName()
+    private function getTableName() : string
     {
         return config('cart.database.table', 'shoppingcart');
     }
@@ -821,7 +819,7 @@ class Cart
      *
      * @return string
      */
-    private function getConnectionName()
+    private function getConnectionName() : string
     {
         $connection = config('cart.database.connection');
 
@@ -838,7 +836,7 @@ class Cart
      *
      * @return string
      */
-    private function numberFormat($value, ?int $decimals = null, ?string $decimalPoint = null, ?string $thousandSeperator = null)
+    private function numberFormat($value, ?int $decimals = null, ?string $decimalPoint = null, ?string $thousandSeperator = null) : string
     {
         if (is_null($decimals)) {
             $decimals = config('cart.format.decimals', 2);
