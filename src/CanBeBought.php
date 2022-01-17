@@ -19,19 +19,17 @@ trait CanBeBought
      *
      * @return string
      */
-    public function getBuyableDescription()
+    public function getBuyableDescription() : ?string
     {
         if (($name = $this->getAttribute('name'))) {
             return $name;
-        }
-
-        if (($title = $this->getAttribute('title'))) {
+        } else if (($title = $this->getAttribute('title'))) {
             return $title;
-        }
-
-        if (($description = $this->getAttribute('description'))) {
+        } else if (($description = $this->getAttribute('description'))) {
             return $description;
-        }
+        } else {
+            return null;
+        }        
     }
 
     /**
