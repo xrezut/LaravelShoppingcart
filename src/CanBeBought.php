@@ -9,7 +9,7 @@ trait CanBeBought
      *
      * @return int|string
      */
-    public function getBuyableIdentifier($options = null)
+    public function getBuyableIdentifier()
     {
         return method_exists($this, 'getKey') ? $this->getKey() : $this->id;
     }
@@ -19,7 +19,7 @@ trait CanBeBought
      *
      * @return string
      */
-    public function getBuyableDescription($options = null)
+    public function getBuyableDescription()
     {
         if (($name = $this->getAttribute('name'))) {
             return $name;
@@ -39,7 +39,7 @@ trait CanBeBought
      *
      * @return float
      */
-    public function getBuyablePrice($options = null)
+    public function getBuyablePrice()
     {
         if (($price = $this->getAttribute('price'))) {
             return $price;
@@ -51,7 +51,7 @@ trait CanBeBought
      *
      * @return float
      */
-    public function getBuyableWeight($options = null)
+    public function getBuyableWeight()
     {
         if (($weight = $this->getAttribute('weight'))) {
             return $weight;
