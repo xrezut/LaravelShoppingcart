@@ -751,7 +751,7 @@ class Cart
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    private function createCartItem($id, string $name, $qty, $price, $weight, array $options) : CartItem
+    private function createCartItem($id, ?string $name = null, $qty, $price, $weight, array $options) : CartItem
     {
         if ($id instanceof Buyable) {
             $cartItem = CartItem::fromBuyable($id, $qty ?: []);
