@@ -44,7 +44,7 @@ class Identifiable implements InstanceIdentifier
      *
      * @return int|string
      */
-    public function getInstanceGlobalDiscount()
+    public function getInstanceGlobalDiscount(): float
     {
         return $this->discountRate;
     }
