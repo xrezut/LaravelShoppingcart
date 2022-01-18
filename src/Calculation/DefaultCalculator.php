@@ -10,8 +10,6 @@ class DefaultCalculator implements Calculator
 {
     public static function getAttribute(string $attribute, CartItem $cartItem)
     {
-        $decimals = config('cart.format.decimals', 2);
-
         switch ($attribute) {
             case 'discount':
                 return $cartItem->price->multiply($cartItem->discountRate, config('cart.rounding', Money::ROUND_UP));
