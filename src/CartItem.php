@@ -84,7 +84,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * The discount rate for the cart item.
      */
-    private Money $discount = 0;
+    public float $discountRate = 0;
 
     /**
      * The cart instance of the cart item.
@@ -348,9 +348,9 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Set the discount rate.
      */
-    public function setDiscount(Money $discount) : self
+    public function setDiscount(float $discount) : self
     {
-        $this->discount = $discount;
+        $this->discountRate = $discountRate;
 
         return $this;
     }
@@ -369,15 +369,6 @@ class CartItem implements Arrayable, Jsonable
         return $this;
     }
     
-    /**
-     * Getter for the raw internal discount rate.
-     * Should be used in calculators.
-     */
-    public function getDiscount() : Money
-    {
-        return $this->discount;
-    }
-
     /**
      * Get an attribute from the cart item or get the associated model.
      *
