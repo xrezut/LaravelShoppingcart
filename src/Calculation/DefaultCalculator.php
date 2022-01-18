@@ -14,7 +14,7 @@ class DefaultCalculator implements Calculator
             case 'discount':
                 return $cartItem->price->multiply($cartItem->discountRate, config('cart.rounding', Money::ROUND_UP));
             case 'tax':
-                return $cartItem->priceTarget->multiply($cartItem->taxRate + 1,  config('cart.rounding', Money::ROUND_UP));
+                return $cartItem->priceTarget->multiply($cartItem->taxRate + 1, config('cart.rounding', Money::ROUND_UP));
             case 'priceTax':
                 return $cartItem->priceTarget->add($cartItem->tax);
             case 'discountTotal':
@@ -27,7 +27,7 @@ class DefaultCalculator implements Calculator
             case 'priceTarget':
                 return $cartItem->priceTotal->subtract($cartItem->discountTotal)->divide($cartItem->qty);
             case 'taxTotal':
-                return $cartItem->subtotal->multiply($cartItem->taxRate + 1,  config('cart.rounding', Money::ROUND_UP));
+                return $cartItem->subtotal->multiply($cartItem->taxRate + 1, config('cart.rounding', Money::ROUND_UP));
             case 'total':
                 return $cartItem->subtotal->add($cartItem->taxTotal);
             default:
