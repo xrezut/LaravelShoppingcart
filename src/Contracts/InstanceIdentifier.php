@@ -18,5 +18,5 @@ interface InstanceIdentifier
      *
      * @return int|string
      */
-    public function getInstanceGlobalDiscount(): Money;
+    public function getInstanceGlobalDiscount(): float;
 }
