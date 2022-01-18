@@ -4,6 +4,7 @@ namespace Gloudemans\Shoppingcart\Calculation;
 
 use Gloudemans\Shoppingcart\CartItem;
 use Gloudemans\Shoppingcart\Contracts\Calculator;
+use Money\Money;
 
 class DefaultCalculator implements Calculator
 {
@@ -13,23 +14,24 @@ class DefaultCalculator implements Calculator
 
         switch ($attribute) {
             case 'discount':
-                return $cartItem->price * ($cartItem->getDiscountRate() / 100);
+                return $cartItem->price->multiply($cartItem->discountRate, config('cart.rounding', Money::ROUND_UP));
             case 'tax':
-                return round($cartItem->priceTarget * ($cartItem->taxRate / 100), $decimals);
+                return $cartItem->priceTarget->multiply($cartItem->taxRate + 1,  config('cart.rounding', Money::ROUND_UP));
             case 'priceTax':
-                return round($cartItem->priceTarget + $cartItem->tax, $decimals);
+                return $cartItem->priceTarget->add($cartItem->tax);
             case 'discountTotal':
-                return round($cartItem->discount * $cartItem->qty, $decimals);
+                return $cartItem->discount->multiply($cartItem->qty, config('cart.rounding', Money::ROUND_UP));
             case 'priceTotal':
-                return round($cartItem->price * $cartItem->qty, $decimals);
+                return $cartItem->price->multiply($cartItem->qty, config('cart.rounding', Money::ROUND_UP));
             case 'subtotal':
-                return max(round($cartItem->priceTotal - $cartItem->discountTotal, $decimals), 0);
+                $subtotal = $cartItem->priceTotal->subtract($cartItem->discountTotal);
+                return $subtotal->isPositive() ? $subtotal : new Money(0, $this->price->getCurrency());
             case 'priceTarget':
-                return round(($cartItem->priceTotal - $cartItem->discountTotal) / $cartItem->qty, $decimals);
+                return $cartItem->priceTotal->subtract($cartItem->discountTotal)->divide($cartItem->qty);
             case 'taxTotal':
-                return round($cartItem->subtotal * ($cartItem->taxRate / 100), $decimals);
+                return $cartItem->subtotal->multiply($cartItem->taxRate + 1,  config('cart.rounding', Money::ROUND_UP));
             case 'total':
-                return round($cartItem->subtotal + $cartItem->taxTotal, $decimals);
+                return $cartItem->subtotal->add($cartItem->taxTotal);
             default:
                 return;
         }
