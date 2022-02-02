@@ -45,7 +45,7 @@ trait CanBeBought
     /**
      * Get the weight of the Buyable item.
      */
-    public function getBuyableWeight(): float
+    public function getBuyableWeight(): int
     {
         if (($weight = $this->getAttribute('weight'))) {
             return $weight;
