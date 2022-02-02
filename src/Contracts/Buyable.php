@@ -2,6 +2,8 @@
 
 namespace Gloudemans\Shoppingcart\Contracts;
 
+use Money\Money;
+
 interface Buyable
 {
     /**
@@ -18,15 +20,11 @@ interface Buyable
 
     /**
      * Get the price of the Buyable item.
-     *
-     * @return float
      */
-    public function getBuyablePrice();
+    public function getBuyablePrice(): Money;
 
     /**
      * Get the weight of the Buyable item.
-     *
-     * @return float
      */
-    public function getBuyableWeight();
+    public function getBuyableWeight(): int;
 }
