@@ -366,7 +366,7 @@ class Cart
     public function priceTotal(): Money
     {
         return $this->getContent()->reduce(function (Money $initial, CartItem $cartItem) {
-            return $initial->add($cartItem->priceTotal)
+            return $initial->add($cartItem->priceTotal);
         }, new Money());
     }
 
