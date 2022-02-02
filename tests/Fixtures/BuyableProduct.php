@@ -60,7 +60,7 @@ class BuyableProduct extends Model implements Buyable
     /**
      * Get the price of the Buyable item.
      */
-    public function getBuyableWeight(): float
+    public function getBuyableWeight(): int
     {
         return $this->weight;
     }
