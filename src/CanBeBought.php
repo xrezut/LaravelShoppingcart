@@ -2,6 +2,8 @@
 
 namespace Gloudemans\Shoppingcart;
 
+use Money\Money;
+
 trait CanBeBought
 {
     /**
@@ -16,8 +18,6 @@ trait CanBeBought
 
     /**
      * Get the name, title or description of the Buyable item.
-     *
-     * @return string
      */
     public function getBuyableDescription(): ?string
     {
@@ -34,10 +34,8 @@ trait CanBeBought
 
     /**
      * Get the price of the Buyable item.
-     *
-     * @return float
      */
-    public function getBuyablePrice()
+    public function getBuyablePrice(): Money
     {
         if (($price = $this->getAttribute('price'))) {
             return $price;
@@ -46,10 +44,8 @@ trait CanBeBought
 
     /**
      * Get the weight of the Buyable item.
-     *
-     * @return float
      */
-    public function getBuyableWeight()
+    public function getBuyableWeight(): float
     {
         if (($weight = $this->getAttribute('weight'))) {
             return $weight;
