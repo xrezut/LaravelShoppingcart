@@ -60,18 +60,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Destroy the cart on user logout
-    |--------------------------------------------------------------------------
-    |
-    | When this option is set to 'true' the cart will automatically
-    | destroy all cart instances when the user logs out.
-    |
-    */
-
-    'destroy_on_logout' => false,
-
-    /*
-    |--------------------------------------------------------------------------
     | Default number format
     |--------------------------------------------------------------------------
     |
