@@ -22,12 +22,6 @@ class ShoppingcartServiceProvider extends ServiceProvider
 
         $this->publishes([__DIR__.'/Config/cart.php' => config_path('cart.php')], 'config');
 
-        $this->app['events']->listen(Logout::class, function () {
-            if ($this->app['config']->get('cart.destroy_on_logout')) {
-                $this->app->make(SessionManager::class)->forget('cart');
-            }
-        });
-
         $this->publishes([
             realpath(__DIR__.'/Database/migrations') => $this->app->databasePath().'/migrations',
         ], 'migrations');
