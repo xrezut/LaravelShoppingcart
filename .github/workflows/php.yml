@@ -22,6 +22,8 @@ jobs:
             php-version: '8.1'
           - laravel-version: '^7.0'
             php-version: '8.1'
+          - laravel-version: '^9.0'
+            php-version: '7.4'
     name: PHP ${{ matrix.php-version }} - Laravel ${{ matrix.laravel-version }}
     env:
       PHP_VERSION: ${{ matrix.php-versions }}
