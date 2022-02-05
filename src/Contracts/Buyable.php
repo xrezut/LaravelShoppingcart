@@ -2,6 +2,7 @@
 
 namespace Gloudemans\Shoppingcart\Contracts;
 
+use Gloudemans\Shoppingcart\CartItemOptions;
 use Money\Money;
 
 interface Buyable
@@ -11,20 +12,20 @@ interface Buyable
      *
      * @return int|string
      */
-    public function getBuyableIdentifier();
+    public function getBuyableIdentifier(CartItemOptions $options);
 
     /**
      * Get the description or title of the Buyable item.
      */
-    public function getBuyableDescription(): ?string;
+    public function getBuyableDescription(CartItemOptions $options): ?string;
 
     /**
      * Get the price of the Buyable item.
      */
-    public function getBuyablePrice(): Money;
+    public function getBuyablePrice(CartItemOptions $options): Money;
 
     /**
      * Get the weight of the Buyable item.
      */
-    public function getBuyableWeight(): int;
+    public function getBuyableWeight(CartItemOptions $options): int;
 }
