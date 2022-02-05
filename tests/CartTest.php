@@ -955,7 +955,7 @@ class CartTest extends TestCase
         $this->assertEquals(new Money(1000, new Currency('USD')), $cartItem->discountTotal);
         $this->assertEquals(new Money(500, new Currency('USD')), $cartItem->priceTarget);
         $this->assertEquals(new Money(1000, new Currency('USD')), $cartItem->subtotal);
-        $this->assertEquals(new Money(095, new Currency('USD')), $cartItem->tax);
+        $this->assertEquals(new Money(95, new Currency('USD')), $cartItem->tax);
         $this->assertEquals(new Money(190, new Currency('USD')), $cartItem->taxTotal);
         $this->assertEquals(new Money(595, new Currency('USD')), $cartItem->priceTax);
         $this->assertEquals(new Money(1190, new Currency('USD')), $cartItem->total);
