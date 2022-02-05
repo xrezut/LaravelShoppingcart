@@ -516,7 +516,7 @@ class Cart
      *
      * @return void
      */
-    public function setGlobalDiscount($discount): void
+    public function setGlobalDiscount(float $discount): void
     {
         $this->discount = $discount;
 
