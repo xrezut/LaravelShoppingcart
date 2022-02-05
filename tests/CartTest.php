@@ -1027,7 +1027,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(new Money('20.00', new Currency('USD')), $cartItem->total(2));
+        $this->assertEquals(new Money('20.00', new Currency('USD')), $cartItem->total);
     }
 
     /** @test */
@@ -1059,7 +1059,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(new Money('24.21', new Currency('USD')), $cartItem->total);
+        $this->assertEquals(new Money(24.21, new Currency('USD')), $cartItem->total);
     }
 
     /** @test */
