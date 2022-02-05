@@ -118,7 +118,7 @@ class Cart
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function add(int|string|Buyable|iterable $id, null|string|int $nameOrQty = null, null|int|array $qtyOrOptions = null, ?Money $price = null, ?int $weight = null, array $options = []): CartItem
+    public function add(int|string|Buyable|iterable $id, null|string|int $nameOrQty = null, null|int|array $qtyOrOptions = null, ?Money $price = null, ?int $weight = null, array $options = []): CartItem|array
     {
         /* Allow adding a CartItem by raw parameters */
         if (is_int($id) || is_string($id)) {
