@@ -2,8 +2,8 @@
 
 namespace Gloudemans\Shoppingcart;
 
-use \Closure;
-use \InvalidArgumentException;
+use Closure;
+use InvalidArgumentException;
 use Carbon\Carbon;
 use Money\Money;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
