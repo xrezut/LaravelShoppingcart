@@ -362,7 +362,7 @@ class Cart
     /**
      * Get the total tax of the items in the cart.
      */
-    public function tax(): float
+    public function tax(): Money
     {
         return $this->getContent()->reduce(function (Money $tax, CartItem $cartItem) {
             return $tax->add($cartItem->taxTotal);
@@ -384,7 +384,7 @@ class Cart
      *
      * @return float
      */
-    public function discount(): float
+    public function discount(): Money
     {
         return $this->getContent()->reduce(function (Money $discount, CartItem $cartItem) {
             return $discount->add($cartItem->discountTotal);
@@ -394,7 +394,7 @@ class Cart
     /**
      * Get the price of the items in the cart (not rounded).
      */
-    public function initial(): float
+    public function initial(): Money
     {
         return $this->getContent()->reduce(function (Money $initial, CartItem $cartItem) {
             return $initial->add($cartItem->price->multiply($cartItem->qty));
