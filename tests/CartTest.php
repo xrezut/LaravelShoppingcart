@@ -1074,7 +1074,7 @@ class CartTest extends TestCase
         $cart2->setGlobalTax(0);
         $cart2->setGlobalDiscount(0);
 
-        $this->assertEquals(new Money(0, new Currency('USD')), $cart2->countItems());
+        $this->assertEquals(0, $cart2->countItems());
 
         $cart2->merge('test');
 
