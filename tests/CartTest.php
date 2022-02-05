@@ -805,54 +805,6 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_cart_formated_numbers_by_config_values()
-    {
-        $this->setConfigFormat(2, ',', '');
-
-        $cart = $this->getCart();
-
-        $cart->add(new BuyableProduct([
-            'price' => 1000.00,
-        ]), 1);
-        $cart->add(new BuyableProduct([
-            'id'    => 2,
-            'price' => 2000.00,
-        ]), 2);
-
-        $this->assertEquals('5000,00', $cart->subtotal());
-        $this->assertEquals('1050,00', $cart->tax());
-        $this->assertEquals('6050,00', $cart->total());
-
-        $this->assertEquals('5000,00', $cart->subtotal);
-        $this->assertEquals('1050,00', $cart->tax);
-        $this->assertEquals('6050,00', $cart->total);
-    }
-
-    /** @test */
-    public function it_can_return_cartItem_formated_numbers_by_config_values()
-    {
-        $this->setConfigFormat(2, ',', '');
-
-        $cart = $this->getCartDiscount(50);
-
-        $cart->add(new BuyableProduct([
-            'price' => 2000.00,
-        ]), 2);
-
-        $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
-
-        $this->assertEquals('2000,00', $cartItem->price());
-        $this->assertEquals('1000,00', $cartItem->discount());
-        $this->assertEquals('2000,00', $cartItem->discountTotal());
-        $this->assertEquals('1000,00', $cartItem->priceTarget());
-        $this->assertEquals('2000,00', $cartItem->subtotal());
-        $this->assertEquals('210,00', $cartItem->tax());
-        $this->assertEquals('420,00', $cartItem->taxTotal());
-        $this->assertEquals('1210,00', $cartItem->priceTax());
-        $this->assertEquals('2420,00', $cartItem->total());
-    }
-
-    /** @test */
     public function it_can_store_the_cart_in_a_database()
     {
         $this->artisan('migrate', [
