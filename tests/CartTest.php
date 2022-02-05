@@ -161,7 +161,10 @@ class CartTest extends TestCase
 
         $this->assertTrue(is_array($cartItems));
         $this->assertCount(2, $cartItems);
-        $this->assertContainsOnlyInstancesOf(CartItem::class, $cartItems);
+        $this->assertIsIterable($cartItems);
+        if (is_iterable($cartItems)) {
+            $this->assertContainsOnlyInstancesOf(CartItem::class, $cartItems);
+        }
 
         Event::assertDispatched('cart.added');
     }
