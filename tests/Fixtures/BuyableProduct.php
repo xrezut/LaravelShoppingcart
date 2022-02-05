@@ -5,6 +5,7 @@ namespace Gloudemans\Tests\Shoppingcart\Fixtures;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
 use Money\Money;
+use Money\Currency;
 
 class BuyableProduct extends Model implements Buyable
 {
@@ -56,7 +57,7 @@ class BuyableProduct extends Model implements Buyable
      */
     public function getBuyablePrice(): Money
     {
-        return new Money($this->price, $this->currency);
+        return new Money($this->price, new Currency($this->currency));
     }
 
     /**
