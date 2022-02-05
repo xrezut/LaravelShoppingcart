@@ -10,6 +10,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Money\Money;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Currencies\ISOCurrencies;
 use ReflectionClass;
 
 /**
@@ -281,6 +283,14 @@ class CartItem implements Arrayable, Jsonable
     public function toJson($options = 0)
     {
         return json_encode($this->toArray(), $options);
+    }
+    
+    /**
+     * Generate a unique id for the cart item.
+     */
+    private function formatMoney(Money $money) : string
+    {
+        return (new DecimalMoneyFormatter(new ISOCurrencies()))->format($money);
     }
     
     /**
