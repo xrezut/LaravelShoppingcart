@@ -389,7 +389,7 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct(), 1, ['color' => 'red']);
+        $cart->add(new BuyableProduct(), 1, new CartItemOptions(['color' => 'red']));
 
         $cart->update('ea65e0bdcd1967c4b3149e9e780177c0', ['options' => new CartItemOptions(['color' => 'blue'])]);
 
@@ -403,8 +403,8 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct(), 1, ['color' => 'red']);
-        $cart->add(new BuyableProduct(), 1, ['color' => 'blue']);
+        $cart->add(new BuyableProduct(), 1, new CartItemOptions(['color' => 'red']));
+        $cart->add(new BuyableProduct(), 1, new CartItemOptions(['color' => 'blue']));
 
         $cart->update('7e70a1e9aaadd18c72921a07aae5d011', ['options' => new CartItemOptions(['color' => 'red'])]);
 
@@ -417,9 +417,9 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct(), 1, ['color' => 'red']);
-        $cart->add(new BuyableProduct(), 1, ['color' => 'green']);
-        $cart->add(new BuyableProduct(), 1, ['color' => 'blue']);
+        $cart->add(new BuyableProduct(), 1, new CartItemOptions(['color' => 'red']));
+        $cart->add(new BuyableProduct(), 1, new CartItemOptions(['color' => 'green']));
+        $cart->add(new BuyableProduct(), 1, new CartItemOptions(['color' => 'blue']));
 
         $cart->update($cart->content()->values()[1]->rowId, ['options' => new CartItemOptions(['color' => 'yellow'])]);
 
