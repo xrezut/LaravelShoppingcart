@@ -1091,7 +1091,7 @@ class CartTest extends TestCase
         $cart2->merge('test');
 
         $this->assertEquals('2', $cart2->countItems());
-        $this->assertEquals(20, $cart2->totalFloat());
+        $this->assertEquals(20, $cart2->total());
 
         $cart3 = $this->getCart();
         $cart3->instance('test3');
@@ -1100,7 +1100,7 @@ class CartTest extends TestCase
 
         $cart3->merge('test', true);
 
-        $this->assertEquals(10, $cart3->totalFloat());
+        $this->assertEquals(10, $cart3->total());
     }
 
     /** @test */
@@ -1132,15 +1132,15 @@ class CartTest extends TestCase
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
         $cart->setTax('027c91341fd5cf4d2579b49c4b6a90da', 19);
         $this->assertEquals('10.00', $cart->initial(2));
-        $this->assertEquals(10.00, $cart->initialFloat());
+        $this->assertEquals(10.00, $cart->initial());
         $this->assertEquals('5.00', $cart->discount(2));
-        $this->assertEquals(5.00, $cart->discountFloat());
+        $this->assertEquals(5.00, $cart->discount());
         $this->assertEquals('5.00', $cart->subtotal(2));
-        $this->assertEquals(5.00, $cart->subtotalFloat());
+        $this->assertEquals(5.00, $cart->subtotal());
         $this->assertEquals('0.95', $cart->tax(2));
-        $this->assertEquals(0.95, $cart->taxFloat());
+        $this->assertEquals(0.95, $cart->tax());
         $this->assertEquals('5.95', $cart->total(2));
-        $this->assertEquals(5.95, $cart->totalFloat());
+        $this->assertEquals(5.95, $cart->total());
     }
 
     /** @test */
@@ -1189,7 +1189,7 @@ class CartTest extends TestCase
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
         $cart->setDiscount('027c91341fd5cf4d2579b49c4b6a90da', 50);
         $this->assertEquals('500.00', $cart->weight(2));
-        $this->assertEquals(500.00, $cart->weightFloat());
+        $this->assertEquals(500.00, $cart->weight());
         $this->assertEquals(500.00, $cartItem->weightTotal);
         $this->assertEquals('250.00', $cartItem->weight(2));
     }
@@ -1311,7 +1311,7 @@ class CartTest extends TestCase
             Event::assertDispatched('cart.merged');
 
             $this->assertEquals('2', $cart2->countItems());
-            $this->assertEquals(20, $cart2->totalFloat());
+            $this->assertEquals(20, $cart2->total());
         });
     }
 
@@ -1345,7 +1345,7 @@ class CartTest extends TestCase
             Event::assertDispatched('cart.added', 2);
             Event::assertDispatched('cart.merged');
             $this->assertEquals('2', $cart2->countItems());
-            $this->assertEquals(20, $cart2->totalFloat());
+            $this->assertEquals(20, $cart2->total());
         });
     }
 
@@ -1377,7 +1377,7 @@ class CartTest extends TestCase
         $this->assertEquals('253,29', $cart->total());
 
         // check that the sum of cart subvalues matches the total (in order to avoid cart summary to looks wrong)
-        $this->assertEquals($cart->totalFloat(), $cart->subtotalFloat() + $cart->taxFloat());
+        $this->assertEquals($cart->total(), $cart->subtotal()->add($cart->tax()));
     }
 
     /** @test */
@@ -1428,7 +1428,7 @@ class CartTest extends TestCase
         // check item price total
         $this->assertEquals(190, $cartItem->priceTotal);
         // check that the sum of cart subvalues matches the total (in order to avoid cart summary to looks wrong)
-        $this->assertEquals($cart->totalFloat(), $cart->subtotalFloat() + $cart->taxFloat());
+        $this->assertEquals($cart->total(), $cart->subtotal()->add($cart->tax());
     }
 
     /**
@@ -1515,7 +1515,7 @@ class CartTest extends TestCase
             'name'  => 'first item',
             'price' => 1000,
         ]), 5);
-        $this->assertEquals(5000, $cart->priceTotalFloat());
+        $this->assertEquals(5000, $cart->priceTotal());
     }
 
     /** @test */
