@@ -123,11 +123,11 @@ class Cart
         /* Allow adding a CartItem by raw parameters */
         if (is_int($id) || is_string($id)) {
             if (! is_null($nameOrQty) && ! is_string($nameOrQty)) {
-                throw new InvalidArgumentException('$nameOrQty must be of string (name) or null when adding with raw parameters')
+                throw new InvalidArgumentException('$nameOrQty must be of string (name) or null when adding with raw parameters');
             }
             
             if (! is_null($qtyOrOptions) && ! is_int($qtyOrOptions)) {
-                throw new InvalidArgumentException('$nameOrQty must be of int (quantity) or null when adding with raw parameters')
+                throw new InvalidArgumentException('$nameOrQty must be of int (quantity) or null when adding with raw parameters');
             }
             
             return $this->addCartItem(CartItem::fromAttributes($id, $nameOrQty, $price, $qtyOrOptions ?: 1, $weight, $options));
@@ -135,11 +135,11 @@ class Cart
         /* Also allow passing a Buyable instance, get data from the instance rather than parameters */
         else if ($id instanceof Buyable) {
             if (! is_int($nameOrQty)) {
-                throw new InvalidArgumentException('$nameOrQty must be of int (quantity) when adding a Buyable instance')
+                throw new InvalidArgumentException('$nameOrQty must be of int (quantity) when adding a Buyable instance');
             }
             
             if (! is_null($qtyOrOptions) && ! is_array($qtyOrOptions)) {
-                throw new InvalidArgumentException('$qtyOrOptions must be of array (options) or null when adding a Buyable instance')
+                throw new InvalidArgumentException('$qtyOrOptions must be of array (options) or null when adding a Buyable instance');
             }
             
             $cartItem = CartItem::fromBuyable($id, $nameOrQty ?: 1, $qtyOrOptions ?: []);
@@ -155,7 +155,7 @@ class Cart
         }
         /* Due to PHP8 union types this should never happen */
         else {
-            throw new InvalidArgumentException('$id must be of type int|string|Buyable|Iterable')
+            throw new InvalidArgumentException('$id must be of type int|string|Buyable|Iterable');
         }
     }
 
