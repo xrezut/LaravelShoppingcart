@@ -3,6 +3,7 @@
 namespace Gloudemans\Tests\Shoppingcart;
 
 use Gloudemans\Shoppingcart\CartItem;
+use Gloudemans\Shoppingcart\CartItemOptions;
 use Gloudemans\Shoppingcart\ShoppingcartServiceProvider;
 use Orchestra\Testbench\TestCase;
 use Money\Money;
@@ -25,7 +26,7 @@ class CartItemTest extends TestCase
     /** @test */
     public function it_can_be_cast_to_an_array()
     {
-        $cartItem = new CartItem(1, 'Some item', new Money(10.00, new Currency('USD')), 550, 2, ['size' => 'XL', 'color' => 'red']);
+        $cartItem = new CartItem(1, 'Some item', new Money(10.00, new Currency('USD')), 550, 2, new CartItemOptions(['size' => 'XL', 'color' => 'red']));
 
         $this->assertEquals([
             'id'      => 1,
@@ -47,7 +48,7 @@ class CartItemTest extends TestCase
     /** @test */
     public function it_can_be_cast_to_json()
     {
-        $cartItem = new CartItem(1, 'Some item', new Money(10.00, new Currency('USD')), 550, 2, ['size' => 'XL', 'color' => 'red']);
+        $cartItem = new CartItem(1, 'Some item', new Money(10.00, new Currency('USD')), 550, 2, new CartItemOptions(['size' => 'XL', 'color' => 'red']));
 
         $this->assertJson($cartItem->toJson());
 
