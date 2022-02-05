@@ -226,8 +226,9 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Create a new instance from a Buyable.
      */
-    public static function fromBuyable(Buyable $item, int $qty = 1, CartItemOptions $options = new CartItemOptions([])) : self
+    public static function fromBuyable(Buyable $item, int $qty = 1, ?CartItemOptions $options = null) : self
     {
+        $options = $options ?: new CartItemOptions([])
         return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $qty, $item->getBuyableWeight($options), $options);
     }
 
