@@ -4,8 +4,7 @@ namespace Gloudemans\Shoppingcart;
 
 use Carbon\Carbon;
 use Money\Money;
-use \Closure;
-use \Iterable;
+use Closure;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Gloudemans\Shoppingcart\Contracts\InstanceIdentifier;
 use Gloudemans\Shoppingcart\Exceptions\CartAlreadyStoredException;
@@ -118,7 +117,7 @@ class Cart
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function add(int|string|Buyable|Iterable $id, null|string|int $nameOrQty = null, null|int|array $qtyOrOptions = null, ?Money $price = null, ?int $weight = null, array $options = []): CartItem
+    public function add(int|string|Buyable|iterable $id, null|string|int $nameOrQty = null, null|int|array $qtyOrOptions = null, ?Money $price = null, ?int $weight = null, array $options = []): CartItem
     {
         /* Allow adding a CartItem by raw parameters */
         if (is_int($id) || is_string($id)) {
