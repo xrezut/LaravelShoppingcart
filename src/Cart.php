@@ -118,7 +118,7 @@ class Cart
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function add(int|string|Buyable|iterable $id, null|string|int $nameOrQty = null, null|int|array $qtyOrOptions = null, ?Money $price = null, ?int $weight = null, array $options = []): CartItem|array
+    public function add(int|string|Buyable|iterable $id, null|string|int $nameOrQty = null, null|int|array $qtyOrOptions = null, ?Money $price = null, ?int $weight = null, ?CartItemOptions $options = null): CartItem|array
     {
         /* Allow adding a CartItem by raw parameters */
         if (is_int($id) || is_string($id)) {
@@ -130,7 +130,7 @@ class Cart
                 throw new InvalidArgumentException('$nameOrQty must be of int (quantity) or null when adding with raw parameters');
             }
             
-            return $this->addCartItem(CartItem::fromAttributes($id, $nameOrQty, $price, $qtyOrOptions ?: 1, $weight, $options));
+            return $this->addCartItem(CartItem::fromAttributes($id, $nameOrQty, $price, $qtyOrOptions ?: 1, $weight, $options ?: new CartItemOptions([])));
         }
         /* Also allow passing a Buyable instance, get data from the instance rather than parameters */
         else if ($id instanceof Buyable) {
