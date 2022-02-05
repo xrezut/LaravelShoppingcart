@@ -169,7 +169,7 @@ class CartItem implements Arrayable, Jsonable
      */
     public function price(): Money
     {
-        return $this->price()->multiply($this->qty);
+        return $this->price->multiply($this->qty);
     }
 
     /**
