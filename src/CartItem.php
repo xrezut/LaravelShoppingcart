@@ -171,7 +171,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Set the discount rate.
      */
-    public function setDiscount(float $discount) : self
+    public function setDiscountRate(float $discountRate) : self
     {
         $this->discountRate = $discountRate;
 
