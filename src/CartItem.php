@@ -228,7 +228,7 @@ class CartItem implements Arrayable, Jsonable
      */
     public static function fromBuyable(Buyable $item, int $qty = 1, ?CartItemOptions $options = null) : self
     {
-        $options = $options ?: new CartItemOptions([])
+        $options = $options ?: new CartItemOptions([]);
         return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $qty, $item->getBuyableWeight($options), $options);
     }
 
