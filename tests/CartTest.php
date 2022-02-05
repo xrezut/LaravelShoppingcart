@@ -1270,8 +1270,8 @@ class CartTest extends TestCase
             Event::assertNotDispatched('cart.added');
             Event::assertDispatched('cart.merged');
 
-            $this->assertEquals('2', $cart2->countItems());
-            $this->assertEquals(20, $cart2->total());
+            $this->assertEquals(2, $cart2->countItems());
+            $this->assertEquals(new Money(2000, new Currency('USD')), $cart2->total());
         });
     }
 
