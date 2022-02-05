@@ -237,9 +237,8 @@ class CartItem implements Arrayable, Jsonable
      */
     public static function fromArray(array $attributes) : self
     {
-        $options = Arr::get($attributes, 'options', []);
-
-        return new self($attributes['id'], $attributes['name'], $attributes['price'], $attributes['weight'], $options);
+        $options = new CartItemOptions(Arr::get($attributes, 'options', []));
+        return new self($attributes['id'], $attributes['name'], $attributes['price'], $attributes['qty'], $attributes['weight'], $options);
     }
 
     /**
@@ -247,9 +246,10 @@ class CartItem implements Arrayable, Jsonable
      *
      * @param int|string $id
      */
-    public static function fromAttributes(int|string $id, string $name, Money $price, int $qty, int $weight, array $options = []) : self
+    public static function fromAttributes(int|string $id, string $name, Money $price, int $qty, int $weight, ?CartItemOptions $options = null) : self
     {
-        return new self($id, $name, $price, $weight, $options);
+        $options = $options ?: new CartItemOptions([]);
+        return new self($id, $name, $price, $qty, $weight, $options);
     }
 
     /**
