@@ -27,7 +27,7 @@ class BuyableProductTrait extends Model implements Buyable
     protected $attributes = [
         'id'       => 1,
         'name'     => 'Item name',
-        'price'    => '10.00',
+        'price'    => 1000,
         'currency' => 'USD',
         'weight'   => 0,
     ];
