@@ -14,11 +14,8 @@ use Gloudemans\Tests\Shoppingcart\Fixtures\BuyableProduct;
 use Gloudemans\Tests\Shoppingcart\Fixtures\BuyableProductTrait;
 use Gloudemans\Tests\Shoppingcart\Fixtures\Identifiable;
 use Gloudemans\Tests\Shoppingcart\Fixtures\ProductModel;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Session\SessionManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
-use Mockery;
 use Orchestra\Testbench\TestCase;
 
 class CartTest extends TestCase
