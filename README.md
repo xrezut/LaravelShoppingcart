@@ -19,7 +19,7 @@ Run the Composer require command from the Terminal:
 
 Now you're ready to start using the shoppingcart in your application.
 
-**As of version 2 of this package it's possibly to use dependency injection to inject an instance of the Cart class into your controller or other class**
+**As of version 2 of this package it's possible to use dependency injection to inject an instance of the Cart class into your controller or other class**
 
 You definitely should publish the `config` file and take a look at it.
 
