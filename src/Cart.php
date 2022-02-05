@@ -14,6 +14,7 @@ use Gloudemans\Shoppingcart\Exceptions\InvalidRowIDException;
 use Gloudemans\Shoppingcart\Exceptions\UnknownModelException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
@@ -109,17 +110,8 @@ class Cart
 
     /**
      * Add an item to the cart.
-     *
-     * @param mixed     $id
-     * @param mixed     $name
-     * @param int|float $qty
-     * @param float     $price
-     * @param float     $weight
-     * @param array     $options
-     *
-     * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function add(int|string|Buyable|iterable $id, null|string|int $nameOrQty = null, null|int|CartItemOptions $qtyOrOptions = null, ?Money $price = null, ?int $weight = null, ?CartItemOptions $options = null): CartItem|array
+    public function add(int|string|Buyable|array $id, null|string|int $nameOrQty = null, null|int|CartItemOptions $qtyOrOptions = null, ?Money $price = null, ?int $weight = null, ?CartItemOptions $options = null): CartItem|array
     {
         /* Allow adding a CartItem by raw parameters */
         if (is_int($id) || is_string($id)) {
@@ -144,12 +136,15 @@ class Cart
             }
             
             $cartItem = CartItem::fromBuyable($id, $nameOrQty ?: 1, $qtyOrOptions ?: new CartItemOptions([]));
-            $cartItem->associate($id);
+
+            if ($id instanceof Model) {
+                $cartItem->associate($id);
+            }
             
             return $this->addCartItem($cartItem);
         }
         /* Also allow passing multiple definitions at the same time, simply call same method and collec return value */
-        else if (is_iterable($id)) {
+        else if (is_array($id)) {
             /* Check if this iterable contains instances */
             if (is_array(head($id)) || head($id) instanceof Buyable) {
                 return array_map(function (Buyable|iterable $item) {
@@ -305,7 +300,11 @@ class Cart
             throw new InvalidRowIDException("The cart does not contain rowId {$rowId}.");
         }
 
-        return $content->get($rowId);
+        $cartItem = $content->get($rowId);
+
+        if ($cartItem instanceof CartItem) {
+            return $cartItem;
+        }
     }
 
     /**
@@ -362,6 +361,8 @@ class Cart
 
         if ($calculated instanceof Money) {
             return $calculated;
+        } else {
+            throw new \TypeError("Calculated price is not an instance of Money");
         }
     }
 
@@ -378,6 +379,8 @@ class Cart
 
         if ($calculated instanceof Money) {
             return $calculated;
+        } else {
+            throw new \TypeError("Calculated discount is not an instance of Money");
         }
     }
 
@@ -392,6 +395,8 @@ class Cart
 
         if ($calculated instanceof Money) {
             return $calculated;
+        } else {
+            throw new \TypeError("Calculated subtotal is not an instance of Money");
         }
     }
     
@@ -420,6 +425,8 @@ class Cart
 
         if ($calculated instanceof Money) {
             return $calculated;
+        } else {
+            throw new \TypeError("Calculated total is not an instance of Money");
         }
     }
 
@@ -428,9 +435,15 @@ class Cart
      */
     public function weight(): int
     {
-        return $this->getContent()->reduce(function (int $total, CartItem $cartItem) {
+        $calculated = $this->getContent()->reduce(function (int $total, CartItem $cartItem) {
             return $total + $cartItem->weight();
         }, 0);
+
+        if (is_int($calculated)) {
+            return $calculated;
+        } else {
+            throw new \TypeError("Calculated weight was not an integer");
+        }
     }
 
     /**
