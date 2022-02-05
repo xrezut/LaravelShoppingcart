@@ -1261,10 +1261,10 @@ class CartTest extends TestCase
 
         $cart->setGlobalTax(50);
 
-        $this->assertEquals(10.00, $cartItem->price(2));
-        $this->assertEquals(5.00, $cart->subtotal(2)); //0.5 qty
-        $this->assertEquals(7.50, $cart->total(2)); // plus tax
-        $this->assertEquals(2.50, $cart->tax(2)); // tax of 5 Bucks
+        $this->assertEquals(new Money(10.00, new Currency('USD')), $cartItem->price);
+        $this->assertEquals(new Money(5.00, new Currency('USD')), $cart->subtotal()); //0.5 qty
+        $this->assertEquals(new Money(7.50, new Currency('USD')), $cart->total()); // plus tax
+        $this->assertEquals(new Money(2.50, new Currency('USD')), $cart->tax()); // tax of 5 Bucks
     }
 
     /** @test */
