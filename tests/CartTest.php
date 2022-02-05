@@ -1226,26 +1226,6 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_does_calculate_correct_results_with_rational_qtys()
-    {
-        // https://github.com/Crinsane/LaravelShoppingcart/issues/544
-        $cart = $this->getCart();
-
-        $cart->add(new BuyableProductTrait([
-            'name' => 'First item',
-        ]), 0.5);
-
-        $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
-
-        $cart->setGlobalTax(50);
-
-        $this->assertEquals(new Money(1000, new Currency('USD')), $cartItem->price);
-        $this->assertEquals(new Money(500, new Currency('USD')), $cart->subtotal()); //0.5 qty
-        $this->assertEquals(new Money(750, new Currency('USD')), $cart->total()); // plus tax
-        $this->assertEquals(new Money(250, new Currency('USD')), $cart->tax()); // tax of 5 Bucks
-    }
-
-    /** @test */
     public function it_does_allow_adding_cart_items_with_weight_and_options()
     {
         // https://github.com/bumbummen99/LaravelShoppingcart/pull/5
