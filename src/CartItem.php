@@ -40,10 +40,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * The quantity for this cart item.
-     *
-     * @var int|float
      */
-    public $qty;
+    public int $qty;
 
     /**
      * The name of the cart item.
@@ -116,15 +114,9 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Set the quantity for this cart item.
-     *
-     * @param int|float $qty
      */
-    public function setQuantity($qty)
+    public function setQuantity(int $qty)
     {
-        if (empty($qty) || !is_numeric($qty)) {
-            throw new \InvalidArgumentException('Please supply a valid quantity.');
-        }
-
         $this->qty = $qty;
     }
 
@@ -233,7 +225,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Create a new instance from a Buyable.
      */
-    public static function fromBuyable(Buyable $item, array $options = []) : self
+    public static function fromBuyable(Buyable $item, CartItemOptions $options = new CartItemOptions([])) : self
     {
         return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $item->getBuyableWeight($options), $options);
     }
