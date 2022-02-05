@@ -2,6 +2,7 @@
 
 namespace Gloudemans\Shoppingcart;
 
+use Gloudemans\Shoppingcart\CartItemOptions;
 use Money\Money;
 use Money\Currency;
 
@@ -12,7 +13,7 @@ trait CanBeBought
      *
      * @return int|string
      */
-    public function getBuyableIdentifier()
+    public function getBuyableIdentifier(CartItemOptions $options)
     {
         return method_exists($this, 'getKey') ? $this->getKey() : $this->id;
     }
@@ -20,7 +21,7 @@ trait CanBeBought
     /**
      * Get the name, title or description of the Buyable item.
      */
-    public function getBuyableDescription(): ?string
+    public function getBuyableDescription(CartItemOptions $options): ?string
     {
         if (($name = $this->getAttribute('name'))) {
             return $name;
@@ -36,7 +37,7 @@ trait CanBeBought
     /**
      * Get the price of the Buyable item.
      */
-    public function getBuyablePrice(): Money
+    public function getBuyablePrice(CartItemOptions $options): Money
     {
         if (($price = $this->getAttribute('price')) && ($currency = $this->getAttribute('currency'))) {
             return new Money($price, new Currency($currency));
@@ -46,7 +47,7 @@ trait CanBeBought
     /**
      * Get the weight of the Buyable item.
      */
-    public function getBuyableWeight(): int
+    public function getBuyableWeight(CartItemOptions $options): int
     {
         if (($weight = $this->getAttribute('weight'))) {
             return $weight;
