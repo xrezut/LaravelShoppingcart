@@ -142,7 +142,7 @@ class Cart
                 throw new InvalidArgumentException('$qtyOrOptions must be of array (options) or null when adding a Buyable instance');
             }
             
-            $cartItem = CartItem::fromBuyable($id, $nameOrQty ?: 1, $qtyOrOptions ?: []);
+            $cartItem = CartItem::fromBuyable($id, $nameOrQty ?: 1, new CartItemOptions($qtyOrOptions ?: []));
             $cartItem->associate($id);
             
             return $this->addCartItem($cartItem);
