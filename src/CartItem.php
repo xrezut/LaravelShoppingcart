@@ -110,7 +110,7 @@ class CartItem implements Arrayable, Jsonable
         $this->qty = $qty;
         $this->weight = $weight;
         $this->options = $options ?: new CartItemOptions([]);
-        $this->rowId = $this->generateRowId($id, $options);
+        $this->rowId = $this->generateRowId($id, $options->toArray());
     }
 
     /**
