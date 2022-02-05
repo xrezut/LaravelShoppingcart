@@ -55,7 +55,7 @@ class BuyableProduct extends Model implements Buyable
      */
     public function getBuyablePrice(): Money
     {
-        return new Money($this->price);
+        return new Money($this->price, $this->currency);
     }
 
     /**
