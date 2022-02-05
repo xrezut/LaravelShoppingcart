@@ -57,10 +57,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * The weight of the product.
-     *
-     * @var float
      */
-    public $weight;
+    public int $weight;
 
     /**
      * The options for this cart item.
@@ -246,7 +244,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @param int|string $id
      */
-    public static function fromAttributes(int|string $id, string $name, Money $price, int $qty, int $weight, ?CartItemOptions $options = null) : self
+    public static function fromAttributes(int|string $id, string $name, Money $price, int $qty = 1, int $weight = 0, ?CartItemOptions $options = null) : self
     {
         $options = $options ?: new CartItemOptions([]);
         return new self($id, $name, $price, $qty, $weight, $options);
