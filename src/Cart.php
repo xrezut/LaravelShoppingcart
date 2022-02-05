@@ -51,7 +51,7 @@ class Cart
     /**
      * Defines the discount percentage.
      */
-    private ?Money $discount = null;
+    private float $discount = 0;
 
     /**
      * Defines the tax rate.
@@ -173,7 +173,7 @@ class Cart
     {
         $item->setInstance($this->currentInstance());
         
-        if (!$keepDiscount) {
+        if (! $keepDiscount) {
             $item->setDiscountRate($this->discount);
         }
 
