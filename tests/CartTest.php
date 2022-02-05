@@ -587,25 +587,6 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_a_formatted_total()
-    {
-        $cart = $this->getCart();
-
-        $cart->add(new BuyableProduct([
-            'name'  => 'First item',
-            'price' => 1000.00,
-        ]));
-        $cart->add(new BuyableProduct([
-            'id'    => 2,
-            'name'  => 'Second item',
-            'price' => 2500.00,
-        ]), 2);
-
-        $this->assertItemsInCart(3, $cart);
-        $this->assertEquals('6.000,00', $cart->subtotal(2, ',', '.'));
-    }
-
-    /** @test */
     public function it_can_search_the_cart_for_a_specific_item()
     {
         $cart = $this->getCart();
@@ -747,21 +728,6 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_a_formatted_subtotal()
-    {
-        $cart = $this->getCart();
-
-        $cart->add(new BuyableProduct([
-            'name'  => 'Some title',
-            'price' => 500,
-        ]), 3);
-
-        $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
-
-        $this->assertEquals('1.500,00', $cartItem->subtotal(2, ',', '.'));
-    }
-
-    /** @test */
     public function it_can_calculate_tax_based_on_the_default_tax_rate_in_the_config()
     {
         $cart = $this->getCart();
@@ -792,21 +758,6 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_the_calculated_tax_formatted()
-    {
-        $cart = $this->getCart();
-
-        $cart->add(new BuyableProduct([
-            'name'  => 'Some title',
-            'price' => 10000.00,
-        ]), 1);
-
-        $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
-
-        $this->assertEquals('2.100,00', $cartItem->tax(2, ',', '.'));
-    }
-
-    /** @test */
     public function it_can_calculate_the_total_tax_for_all_cart_items()
     {
         $cart = $this->getCart();
@@ -821,24 +772,6 @@ class CartTest extends TestCase
         ]), 2);
 
         $this->assertEquals(10.50, $cart->tax);
-    }
-
-    /** @test */
-    public function it_can_return_formatted_total_tax()
-    {
-        $cart = $this->getCart();
-
-        $cart->add(new BuyableProduct([
-            'name'  => 'Some title',
-            'price' => 1000.00,
-        ]), 1);
-        $cart->add(new BuyableProduct([
-            'id'    => 2,
-            'name'  => 'Some title',
-            'price' => 2000.00,
-        ]), 2);
-
-        $this->assertEquals('1.050,00', $cart->tax(2, ',', '.'));
     }
 
     /** @test */
@@ -869,22 +802,6 @@ class CartTest extends TestCase
         ]), 2);
 
         $this->assertEquals(50.00, $cart->subtotal);
-    }
-
-    /** @test */
-    public function it_can_return_formatted_subtotal()
-    {
-        $cart = $this->getCart();
-
-        $cart->add(new BuyableProduct([
-            'price' => 1000.00,
-        ]), 1);
-        $cart->add(new BuyableProduct([
-            'id'    => 2,
-            'price' => 2000.00,
-        ]), 2);
-
-        $this->assertEquals('5000,00', $cart->subtotal(2, ',', ''));
     }
 
     /** @test */
