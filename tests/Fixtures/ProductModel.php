@@ -2,7 +2,9 @@
 
 namespace Gloudemans\Tests\Shoppingcart\Fixtures;
 
-class ProductModel
+use Illuminate\Database\Eloquent\Model;
+
+class ProductModel extends Model
 {
     public $someValue = 'Some value';
 
