@@ -20,6 +20,7 @@ class BuyableProductTrait extends Model implements Buyable
         'title',
         'description',
         'price',
+        'currency',
         'weight',
     ];
 
