@@ -1428,7 +1428,7 @@ class CartTest extends TestCase
             'name'  => 'first item',
             'price' => 1000,
         ]), 5);
-        $this->assertEquals(new Money(500000, new Currency('USD')), $cart->priceTotal());
+        $this->assertEquals(new Money(5000, new Currency('USD')), $cart->priceTotal());
     }
 
     /** @test */
