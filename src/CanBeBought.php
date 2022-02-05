@@ -37,8 +37,8 @@ trait CanBeBought
      */
     public function getBuyablePrice(): Money
     {
-        if (($price = $this->getAttribute('price'))) {
-            return new Money($price);
+        if (($price = $this->getAttribute('price')) && ($currency = $this->getAttribute('currency'))) {
+            return new Money($price, $currency);
         }
     }
 
