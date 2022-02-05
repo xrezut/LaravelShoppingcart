@@ -583,7 +583,7 @@ class CartTest extends TestCase
         ]), 2);
 
         $this->assertItemsInCart(3, $cart);
-        $this->assertEquals(60.00, $cart->subtotal());
+        $this->assertEquals(new Money(60.00, new Currency('USD')), $cart->subtotal());
     }
 
     /** @test */
@@ -724,7 +724,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(29.97, $cartItem->subtotal);
+        $this->assertEquals(new Money(29.97, new Currency('USD')), $cartItem->subtotal);
     }
 
     /** @test */
@@ -738,7 +738,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(2.10, $cartItem->tax);
+        $this->assertEquals(new Money(2.10, new Currency('USD')), $cartItem->tax);
     }
 
     /** @test */
@@ -754,7 +754,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(1.90, $cartItem->tax);
+        $this->assertEquals(new Money(1.90, new Currency('USD')), $cartItem->tax);
     }
 
     /** @test */
@@ -771,7 +771,7 @@ class CartTest extends TestCase
             'price' => 20.00,
         ]), 2);
 
-        $this->assertEquals(10.50, $cart->tax);
+        $this->assertEquals(new Money(10.50, new Currency('USD')), $cart->tax);
     }
 
     /** @test */
@@ -787,7 +787,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(19, $cartItem->taxRate);
+        $this->assertEquals(new Money(19, new Currency('USD')), $cartItem->taxRate);
     }
 
     /** @test */
@@ -801,7 +801,7 @@ class CartTest extends TestCase
             'price' => 20.00,
         ]), 2);
 
-        $this->assertEquals(50.00, $cart->subtotal);
+        $this->assertEquals(new Money(50.00, new Currency('USD')), $cart->subtotal());
     }
 
     /** @test */
