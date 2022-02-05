@@ -98,7 +98,7 @@ class CartItem implements Arrayable, Jsonable
      * @param float      $weight
      * @param array      $options
      */
-    public function __construct($id, string $name, Money $price, int $weight = 0, array $options = [])
+    public function __construct($id, string $name, Money $price, int $qty, int $weight = 0, array $options = [])
     {
         if (!is_string($id) && !is_int($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
@@ -107,6 +107,7 @@ class CartItem implements Arrayable, Jsonable
         $this->id = $id;
         $this->name = $name;
         $this->price = $price;
+        $this->qty = $qty;
         $this->weight = $weight;
         $this->options = new CartItemOptions($options);
         $this->rowId = $this->generateRowId($id, $options);
@@ -225,9 +226,9 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Create a new instance from a Buyable.
      */
-    public static function fromBuyable(Buyable $item, CartItemOptions $options = new CartItemOptions([])) : self
+    public static function fromBuyable(Buyable $item, int $qty = 1, CartItemOptions $options = new CartItemOptions([])) : self
     {
-        return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $item->getBuyableWeight($options), $options);
+        return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $qty, $item->getBuyableWeight($options), $options);
     }
 
     /**
