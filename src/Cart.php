@@ -134,7 +134,7 @@ class Cart
         }
         /* Also allow passing a Buyable instance, get data from the instance rather than parameters */
         else if ($id instanceof Buyable) {
-            if (! is_int($nameOrQty)) {
+            if (! is_null($qtyOrOptions) && ! is_int($nameOrQty)) {
                 throw new InvalidArgumentException('$nameOrQty must be of int (quantity) when adding a Buyable instance');
             }
             
