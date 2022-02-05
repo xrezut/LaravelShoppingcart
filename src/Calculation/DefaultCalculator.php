@@ -23,7 +23,7 @@ class DefaultCalculator implements Calculator
                 return $cartItem->price->multiply($cartItem->qty, config('cart.rounding', Money::ROUND_UP));
             case 'subtotal':
                 $subtotal = $cartItem->priceTotal->subtract($cartItem->discountTotal);
-                return $subtotal->isPositive() ? $subtotal : new Money(0, $this->price->getCurrency());
+                return $subtotal->isPositive() ? $subtotal : new Money(0, $cartItem->price->getCurrency());
             case 'priceTarget':
                 return $cartItem->priceTotal->subtract($cartItem->discountTotal)->divide($cartItem->qty);
             case 'taxTotal':
