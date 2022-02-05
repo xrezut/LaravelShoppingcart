@@ -124,11 +124,11 @@ class Cart
         /* Allow adding a CartItem by raw parameters */
         if (is_int($id) || is_string($id)) {
             if (! is_null($nameOrQty) && ! is_string($nameOrQty)) {
-                throw new InvalidArgumentException('$nameOrQty must be of string (name) or null when adding with raw parameters');
+                throw new InvalidArgumentException('$nameOrQty must be of type string (name) or null when adding with raw parameters');
             }
             
             if (! is_null($qtyOrOptions) && ! is_int($qtyOrOptions)) {
-                throw new InvalidArgumentException('$nameOrQty must be of int (quantity) or null when adding with raw parameters');
+                throw new InvalidArgumentException('$nameOrQty must be of type int (quantity) or null when adding with raw parameters');
             }
             
             return $this->addCartItem(CartItem::fromAttributes($id, $nameOrQty, $price, $qtyOrOptions ?: 1, $weight ?: 0, $options ?: new CartItemOptions([])));
@@ -136,14 +136,14 @@ class Cart
         /* Also allow passing a Buyable instance, get data from the instance rather than parameters */
         else if ($id instanceof Buyable) {
             if (! is_null($qtyOrOptions) && ! is_int($nameOrQty)) {
-                throw new InvalidArgumentException('$nameOrQty must be of int (quantity) when adding a Buyable instance');
+                throw new InvalidArgumentException('$nameOrQty must be of type int (quantity) when adding a Buyable instance');
             }
             
-            if (! is_null($qtyOrOptions) && ! is_array($qtyOrOptions)) {
-                throw new InvalidArgumentException('$qtyOrOptions must be of array (options) or null when adding a Buyable instance');
+            if (! is_null($qtyOrOptions) && ! $qtyOrOptions instanceof CartItemOptions) {
+                throw new InvalidArgumentException('$qtyOrOptions must be of type CartItemOptions (options) or null when adding a Buyable instance');
             }
             
-            $cartItem = CartItem::fromBuyable($id, $nameOrQty ?: 1, new CartItemOptions($qtyOrOptions ?: []));
+            $cartItem = CartItem::fromBuyable($id, $nameOrQty ?: 1, $qtyOrOptions ?: new CartItemOptions([]));
             $cartItem->associate($id);
             
             return $this->addCartItem($cartItem);
