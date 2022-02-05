@@ -31,7 +31,7 @@ class CartItemTest extends TestCase
         $this->assertEquals([
             'id'      => 1,
             'name'    => 'Some item',
-            'price'   => 10.00,
+            'price'   => '10.00',
             'rowId'   => '07d5da5550494c62daf9993cf954303f',
             'qty'     => 2,
             'options' => [
