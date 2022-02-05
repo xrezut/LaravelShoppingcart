@@ -532,24 +532,24 @@ class CartTest extends TestCase
                 'id'       => 1,
                 'name'     => 'Item name',
                 'qty'      => 1,
-                'price'    => 10.00,
-                'tax'      => 2.10,
-                'subtotal' => 10.0,
+                'price'    => '10.00',
+                'tax'      => '2.10',
+                'subtotal' => '10.00',
                 'options'  => [],
-                'discount' => 0.0,
-                'weight'   => 0.0,
+                'discount' => '0',
+                'weight'   => '0.00',
             ],
             '370d08585360f5c568b18d1f2e4ca1df' => [
                 'rowId'    => '370d08585360f5c568b18d1f2e4ca1df',
                 'id'       => 2,
                 'name'     => 'Item name',
                 'qty'      => 1,
-                'price'    => 10.00,
-                'tax'      => 2.10,
-                'subtotal' => 10.0,
+                'price'    => '10.00',
+                'tax'      => '2.10',
+                'subtotal' => '10.00',
                 'options'  => [],
-                'discount' => 0.0,
-                'weight'   => 0.0,
+                'discount' => '0',
+                'weight'   => '0.00',
             ],
         ], $content->toArray());
     }
@@ -579,7 +579,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct([
             'id'    => 2,
             'name'  => 'Second item',
-            'price' => 25.00,
+            'price' => '25.00',
         ]), 2);
 
         $this->assertItemsInCart(3, $cart);
@@ -719,7 +719,7 @@ class CartTest extends TestCase
 
         $cart->add(new BuyableProduct([
             'name'  => 'Some title',
-            'price' => 9.99,
+            'price' => '9.99',
         ]), 3);
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
@@ -768,7 +768,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct([
             'id'    => 2,
             'name'  => 'Some title',
-            'price' => 20.00,
+            'price' => '20.00',
         ]), 2);
 
         $this->assertEquals(new Money(1050, new Currency('USD')), $cart->tax);
@@ -798,7 +798,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(), 1);
         $cart->add(new BuyableProduct([
             'id'    => 2,
-            'price' => 20.00,
+            'price' => '20.00',
         ]), 2);
 
         $this->assertEquals(new Money(5000, new Currency('USD')), $cart->subtotal());
@@ -992,7 +992,7 @@ class CartTest extends TestCase
         $cart = $this->getCartDiscount(50);
         $cart->add(new BuyableProduct([
             'name'  => 'First item',
-            'price' => 5.00,
+            'price' => '5.00',
         ]), 2);
 
         $cart->update('027c91341fd5cf4d2579b49c4b6a90da', new BuyableProduct([
@@ -1045,21 +1045,6 @@ class CartTest extends TestCase
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
         $this->assertEquals(new Money(1000, new Currency('USD')), $cartItem->total);
-    }
-
-    /** @test */
-    public function cart_has_no_rounding_errors()
-    {
-        $cart = $this->getCart();
-
-        $cart->add(new BuyableProduct([
-            'name'  => 'Item',
-            'price' => 10.004,
-        ]), 2);
-
-        $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
-
-        $this->assertEquals(new Money(2421, new Currency('USD')), $cartItem->total);
     }
 
     /** @test */
@@ -1343,37 +1328,6 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_use_correctly_rounded_values_for_totals_and_cart_summary()
-    {
-        $this->setConfigFormat(2, ',', '');
-
-        $cart = $this->getCartDiscount(6);
-
-        $cartItem = $cart->add(new BuyableProduct([
-            'name'  => 'First item',
-            'price' => 0.18929,
-        ]), 1000);
-        $cart->add(new BuyableProduct([
-            'id'    => 2,
-            'name'  => 'Second item',
-            'price' => 4.41632,
-        ]), 5);
-        $cart->add(new BuyableProduct([
-            'id'    => 3,
-            'name'  => 'Third item',
-            'price' => 0.37995,
-        ]), 25);
-
-        $cart->setGlobalTax(22);
-
-        // check total
-        $this->assertEquals(new Money(25329, new Currency('USD')), $cart->total());
-
-        // check that the sum of cart subvalues matches the total (in order to avoid cart summary to looks wrong)
-        $this->assertEquals($cart->total(), $cart->subtotal()->add($cart->tax()));
-    }
-
-    /** @test */
     public function it_use_gross_price_as_base_price()
     {
         $cart = $this->getCartDiscount(0);
@@ -1388,40 +1342,6 @@ class CartTest extends TestCase
 
         // check net price
         $this->assertEquals(new Money(8197, new Currency('USD')), $cartItem->priceNet);
-    }
-
-    /** @test */
-    public function it_use_gross_price_and_it_use_correctly_rounded_values_for_totals_and_cart_summary()
-    {
-        $this->setConfigFormat(2, ',', '');
-        config(['cart.calculator' => GrossPrice::class]);
-
-        $cart = $this->getCartDiscount(6);
-
-        $cartItem = $cart->add(new BuyableProduct([
-            'name'  => 'First item',
-            'price' => 0.23093,
-        ]), 1000);
-        $cart->add(new BuyableProduct([
-            'id'    => 2,
-            'name'  => 'Second item',
-            'price' => 5.38791,
-        ]), 5);
-        $cart->add(new BuyableProduct([
-            'id'    => 3,
-            'name'  => 'Third item',
-            'price' => 0.46354,
-        ]), 25);
-
-        $cart->setGlobalTax(22);
-
-        // check total
-        $this->assertEquals(new Money(25412, new Currency('USD')), $cart->total());
-
-        // check item price total
-        $this->assertEquals(190, $cartItem->priceTotal);
-        // check that the sum of cart subvalues matches the total (in order to avoid cart summary to looks wrong)
-        $this->assertEquals($cart->total(), $cart->subtotal()->add($cart->tax()));
     }
 
     /**
