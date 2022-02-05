@@ -218,9 +218,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $options = ['size' => 'XL', 'color' => 'red'];
-
-        $cart->add(new BuyableProduct(), 1, $options);
+        $cart->add(new BuyableProduct(), 1, new CartItemOptions(['size' => 'XL', 'color' => 'red']));
 
         $cartItem = $cart->get('07d5da5550494c62daf9993cf954303f');
 
