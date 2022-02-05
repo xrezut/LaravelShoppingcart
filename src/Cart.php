@@ -150,8 +150,8 @@ class Cart
         /* Also allow passing multiple definitions at the same time, simply call same method and collec return value */
         else if (is_iterable($id)) {
             /* Check if this iterable contains instances */
-            if (is_array(head($item)) || head($item) instanceof Buyable) {
-                return array_map(function ($item) {
+            if (is_array(head($id)) || head($id) instanceof Buyable) {
+                return array_map(function (Buyable|iterable $item) {
                     return $this->add($item);
                 }, $id);
             }
