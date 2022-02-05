@@ -118,15 +118,34 @@ class Cart
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function add(int|string|Buyable|Iterable $id, ?string $name = null, ?int $qty = null, ?Money $price = null, ?int $weight = null, array $options = []): CartItem
+    public function add(int|string|Buyable|Iterable $id, null|string|int $nameOrQty = null, null|int|array $qtyOrOptions = null, ?Money $price = null, ?int $weight = null, array $options = []): CartItem
     {
         /* Allow adding a CartItem by raw parameters */
         if (is_int($id) || is_string($id)) {
-            return $this->addCartItem($this->createCartItem($id, $name, $qty, $price, $weight, $options));
+            if (! is_null($nameOrQty) && ! is_string($nameOrQty)) {
+                throw new InvalidArgumentException('$nameOrQty must be of string (name) or null when adding with raw parameters')
+            }
+            
+            if (! is_null($qtyOrOptions) && ! is_int($qtyOrOptions)) {
+                throw new InvalidArgumentException('$nameOrQty must be of int (quantity) or null when adding with raw parameters')
+            }
+            
+            return $this->addCartItem(CartItem::fromAttributes($id, $nameOrQty, $price, $qtyOrOptions ?: 1, $weight, $options));
         }
         /* Also allow passing a Buyable instance, get data from the instance rather than parameters */
         else if ($id instanceof Buyable) {
-            return $this->addCartItem($this->createCartItem($id);
+            if (! is_int($nameOrQty)) {
+                throw new InvalidArgumentException('$nameOrQty must be of int (quantity) when adding a Buyable instance')
+            }
+            
+            if (! is_null($qtyOrOptions) && ! is_array($qtyOrOptions)) {
+                throw new InvalidArgumentException('$qtyOrOptions must be of array (options) or null when adding a Buyable instance')
+            }
+            
+            $cartItem = CartItem::fromBuyable($id, $nameOrQty ?: 1, $qtyOrOptions ?: []);
+            $cartItem->associate($id);
+            
+            return $this->addCartItem($cartItem);
         }
         /* Also allow passing multiple definitions at the same time, simply call same method and collec return value */
         else if (is_iterable($id)) {
@@ -152,6 +171,8 @@ class Cart
      */
     public function addCartItem(CartItem $item, bool $keepDiscount = false, bool $keepTax = false, bool $dispatchEvent = true): CartItem
     {
+        $cartItem->setInstance($this->currentInstance());
+        
         if (!$keepDiscount) {
             $item->setDiscountRate($this->discount);
         }
@@ -666,49 +687,6 @@ class Cart
         }
 
         return new Collection();
-    }
-
-    /**
-     * Create a new CartItem from the supplied attributes.
-     *
-     * @param mixed     $id
-     * @param mixed     $name
-     * @param int|float $qty
-     * @param float     $price
-     * @param float     $weight
-     * @param array     $options
-     */
-    private function createCartItem($id, ?string $name = null, int $qty, ?Money $price = null, int $weight = 0, array $options = []): CartItem
-    {
-        if ($id instanceof Buyable) {
-            $cartItem = CartItem::fromBuyable($id, $qty ?: []);
-            $cartItem->setQuantity($name ?: 1);
-            $cartItem->associate($id);
-        } elseif (is_array($id)) {
-            $cartItem = CartItem::fromArray($id);
-            $cartItem->setQuantity($id['qty']);
-        } else {
-            $cartItem = CartItem::fromAttributes($id, $name, $price, $weight, $options);
-            $cartItem->setQuantity($qty);
-        }
-
-        $cartItem->setInstance($this->currentInstance());
-
-        return $cartItem;
-    }
-
-    /**
-     * Check if the item is a multidimensional array or an array of Buyables.
-     *
-     * @param mixed $item
-     */
-    private function isMulti($item): bool
-    {
-        if (! is_array($item)) {
-            return false;
-        }
-
-        return is_array(head($item)) || head($item) instanceof Buyable;
     }
 
     /**
