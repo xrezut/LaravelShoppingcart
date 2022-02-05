@@ -234,8 +234,7 @@ class CartTest extends TestCase
      */
     public function it_will_validate_the_identifier()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Please supply a valid identifier.');
+        $this->expectException(\TypeError::class);
 
         $cart = $this->getCart();
 
@@ -247,8 +246,7 @@ class CartTest extends TestCase
      */
     public function it_will_validate_the_quantity()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Please supply a valid quantity.');
+        $this->expectException(\TypeError::class);
 
         $cart = $this->getCart();
 
@@ -260,8 +258,7 @@ class CartTest extends TestCase
      */
     public function it_will_validate_the_price()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Please supply a valid price.');
+        $this->expectException(\TypeError::class);
 
         $cart = $this->getCart();
 
@@ -273,8 +270,7 @@ class CartTest extends TestCase
      */
     public function it_will_validate_the_weight()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Please supply a valid weight');
+        $this->expectException(\TypeError::class);
 
         $cart = $this->getCart();
 
