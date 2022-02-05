@@ -790,7 +790,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(new Money(19, new Currency('USD')), $cartItem->taxRate);
+        $this->assertEquals(19.0, $cartItem->taxRate);
     }
 
     /** @test */
