@@ -2,10 +2,10 @@
 
 namespace Gloudemans\Shoppingcart;
 
+use \Closure;
+use \InvalidArgumentException;
 use Carbon\Carbon;
 use Money\Money;
-use Closure;
-use \InvalidArgumentException;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Gloudemans\Shoppingcart\Contracts\InstanceIdentifier;
 use Gloudemans\Shoppingcart\Exceptions\CartAlreadyStoredException;
