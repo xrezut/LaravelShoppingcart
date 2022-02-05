@@ -1170,9 +1170,8 @@ class CartTest extends TestCase
             'weight' => 250,
         ]), 2);
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
-        $cart->setDiscount('027c91341fd5cf4d2579b49c4b6a90da', 50);
-        $this->assertEquals(500, $cart->weight);
-        $this->assertEquals(500.00, $cartItem->weightTotal);
+        $this->assertEquals(500, $cart->weight());
+        $this->assertEquals(500, $cartItem->weightTotal);
     }
 
     /** @test */
