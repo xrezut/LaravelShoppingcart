@@ -1394,7 +1394,7 @@ class CartTest extends TestCase
         $cart->setGlobalTax(22);
 
         // check net price
-        $this->assertEquals(81.97, round($cartItem->priceNet, 2));
+        $this->assertEquals(new Money(81.97, new Currency('USD')), $cartItem->priceNet);
     }
 
     /** @test */
