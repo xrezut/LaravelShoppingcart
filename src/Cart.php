@@ -184,7 +184,7 @@ class Cart
         $item->setInstance($this->currentInstance());
         
         if (! $keepDiscount) {
-            $item->setDiscountRate($this->discount);
+            $item->setDiscount($this->discount);
         }
 
         if (!$keepTax) {
@@ -350,33 +350,19 @@ class Cart
     }
 
     /**
-     * Get the total price of the items in the cart.
+     * Get the discount of the items in the cart.
+     *
+     * @return Money
      */
-    public function total(): Money
+    public function price(): Money
     {
-        return $this->getContent()->reduce(function (Money $total, CartItem $cartItem) {
-            return $total->add($cartItem->total);
+        $calculated = $this->getContent()->reduce(function (Money $discount, CartItem $cartItem) {
+            return $discount->add($cartItem->price());
         }, new Money(0, new Currency('USD')));
-    }
-    
-    /**
-     * Get the total tax of the items in the cart.
-     */
-    public function tax(): Money
-    {
-        return $this->getContent()->reduce(function (Money $tax, CartItem $cartItem) {
-            return $tax->add($cartItem->taxTotal);
-        }, new Money(0, new Currency('USD')));
-    }
 
-    /**
-     * Get the subtotal (total - tax) of the items in the cart.
-     */
-    public function subtotal(): Money
-    {
-        return $this->getContent()->reduce(function (Money $subTotal, CartItem $cartItem) {
-            return $subTotal->add($cartItem->subtotal);
-        }, new Money(0, new Currency('USD')));
+        if ($calculated instanceof Money) {
+            return $calculated;
+        }
     }
 
     /**
@@ -386,38 +372,64 @@ class Cart
      */
     public function discount(): Money
     {
-        return $this->getContent()->reduce(function (Money $discount, CartItem $cartItem) {
-            return $discount->add($cartItem->discountTotal);
+        $calculated = $this->getContent()->reduce(function (Money $discount, CartItem $cartItem) {
+            return $discount->add($cartItem->discount());
         }, new Money(0, new Currency('USD')));
+
+        if ($calculated instanceof Money) {
+            return $calculated;
+        }
     }
 
     /**
-     * Get the price of the items in the cart (not rounded).
+     * Get the subtotal (total - tax) of the items in the cart.
      */
-    public function initial(): Money
+    public function subtotal(): Money
     {
-        return $this->getContent()->reduce(function (Money $initial, CartItem $cartItem) {
-            return $initial->add($cartItem->price->multiply($cartItem->qty));
+        $calculated = $this->getContent()->reduce(function (Money $subTotal, CartItem $cartItem) {
+            return $subTotal->add($cartItem->subtotal());
         }, new Money(0, new Currency('USD')));
+
+        if ($calculated instanceof Money) {
+            return $calculated;
+        }
+    }
+    
+    /**
+     * Get the total tax of the items in the cart.
+     */
+    public function tax(): Money
+    {
+        $calculated = $this->getContent()->reduce(function (Money $tax, CartItem $cartItem) {
+            return $tax->add($cartItem->tax());
+        }, new Money(0, new Currency('USD')));
+
+        if ($calculated instanceof Money) {
+            return $calculated;
+        }
     }
 
     /**
-     * Get the price of the items in the cart (previously rounded).
+     * Get the total price of the items in the cart.
      */
-    public function priceTotal(): Money
+    public function total(): Money
     {
-        return $this->getContent()->reduce(function (Money $initial, CartItem $cartItem) {
-            return $initial->add($cartItem->priceTotal);
+        $calculated = $this->getContent()->reduce(function (Money $total, CartItem $cartItem) {
+            return $total->add($cartItem->total());
         }, new Money(0, new Currency('USD')));
+
+        if ($calculated instanceof Money) {
+            return $calculated;
+        }
     }
 
     /**
      * Get the total weight of the items in the cart.
      */
-    public function weight(): float
+    public function weight(): int
     {
-        return $this->getContent()->reduce(function (float $total, CartItem $cartItem) {
-            return $total + ($cartItem->qty * $cartItem->weight);
+        return $this->getContent()->reduce(function (int $total, CartItem $cartItem) {
+            return $total + $cartItem->weight();
         }, 0);
     }
 
@@ -509,7 +521,7 @@ class Cart
     {
         $cartItem = $this->get($rowId);
 
-        $cartItem->setDiscountRate($discount);
+        $cartItem->setDiscount($discount);
 
         $content = $this->getContent();
 

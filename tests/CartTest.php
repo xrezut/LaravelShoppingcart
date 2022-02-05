@@ -668,7 +668,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(BuyableProduct::class, $cartItem->modelFQCN);
+        $this->assertEquals(BuyableProduct::class, $cartItem->associatedModel);
     }
 
     /** @test */
@@ -682,7 +682,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertEquals(ProductModel::class, $cartItem->modelFQCN);
+        $this->assertEquals(ProductModel::class, $cartItem->associatedModel);
     }
 
     /**
@@ -711,8 +711,8 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertInstanceOf(ProductModel::class, $cartItem->model);
-        $this->assertEquals('Some value', $cartItem->model->someValue);
+        $this->assertInstanceOf(ProductModel::class, $cartItem->model());
+        $this->assertEquals('Some value', $cartItem->model()->someValue);
     }
 
     /** @test */
@@ -1134,7 +1134,7 @@ class CartTest extends TestCase
             'name' => 'First item',
         ]), 1);
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
-        $this->assertEquals(50, $cartItem->discountRate);
+        $this->assertEquals(50, $cartItem->discount);
     }
 
     /** @test */
@@ -1158,7 +1158,7 @@ class CartTest extends TestCase
         ]), 1);
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
         $cart->setDiscount('027c91341fd5cf4d2579b49c4b6a90da', 50);
-        $this->assertEquals(50, $cartItem->discountRate);
+        $this->assertEquals(50, $cartItem->discount);
     }
 
     /** @test */
@@ -1171,7 +1171,7 @@ class CartTest extends TestCase
         ]), 2);
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
         $this->assertEquals(500, $cart->weight());
-        $this->assertEquals(500, $cartItem->weightTotal);
+        $this->assertEquals(500, $cartItem->weight());
     }
 
     /** @test */

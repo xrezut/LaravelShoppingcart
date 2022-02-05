@@ -2,30 +2,15 @@
 
 namespace Gloudemans\Shoppingcart;
 
-use Gloudemans\Shoppingcart\Calculation\DefaultCalculator;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
-use Gloudemans\Shoppingcart\Contracts\Calculator;
-use Gloudemans\Shoppingcart\Exceptions\InvalidCalculatorException;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Money\Money;
 use Money\Formatter\DecimalMoneyFormatter;
 use Money\Currencies\ISOCurrencies;
-use ReflectionClass;
 
-/**
- * @property-read mixed discount
- * @property-read float discountTotal
- * @property-read float priceTarget
- * @property-read float priceNet
- * @property-read float priceTotal
- * @property-read float subtotal
- * @property-read float taxTotal
- * @property-read float tax
- * @property-read float total
- * @property-read float priceTax
- */
 class CartItem implements Arrayable, Jsonable
 {
     /**
@@ -35,10 +20,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * The ID of the cart item.
-     *
-     * @var int|string
      */
-    public $id;
+    public int|string $id;
 
     /**
      * The quantity for this cart item.
@@ -47,8 +30,6 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * The name of the cart item.
-     *
-     * @var string
      */
     public string $name;
 
@@ -74,15 +55,13 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * The FQN of the associated model.
-     *
-     * @var string|null
      */
-    private $associatedModel = null;
+    public ?string $associatedModel = null;
 
     /**
      * The discount rate for the cart item.
      */
-    public float $discountRate = 0;
+    public float|Money $discount = 0;
 
     /**
      * The cart instance of the cart item.
@@ -91,10 +70,6 @@ class CartItem implements Arrayable, Jsonable
 
     public function __construct(int|string $id, string $name, Money $price, int $qty = 1, int $weight = 0, ?CartItemOptions $options = null)
     {
-        if (!is_string($id) && !is_int($id)) {
-            throw new \InvalidArgumentException('Please supply a valid identifier.');
-        }
-
         $this->id = $id;
         $this->name = $name;
         $this->price = $price;
@@ -142,7 +117,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @param mixed $model
      */
-    public function associate($model) : self
+    public function associate(string|Model $model) : self
     {
         $this->associatedModel = is_string($model) ? $model : get_class($model);
 
@@ -162,9 +137,9 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Set the discount rate.
      */
-    public function setDiscountRate(float $discountRate) : self
+    public function setDiscount(float|Money $discount) : self
     {
-        $this->discountRate = $discountRate;
+        $this->discount = $discount;
 
         return $this;
     }
@@ -178,40 +153,70 @@ class CartItem implements Arrayable, Jsonable
 
         return $this;
     }
-    
-    /**
-     * Get an attribute from the cart item or get the associated model.
-     *
-     * @return mixed
-     */
-    public function __get(string $attribute)
+
+    public function model(): ?Model
     {
-        if (property_exists($this, $attribute)) {
-            return $this->{$attribute};
-        }
-        $decimals = config('cart.format.decimals', 2);
-
-        switch ($attribute) {
-            case 'model':
-                if (isset($this->associatedModel)) {
-                    return with(new $this->associatedModel())->find($this->id);
-                }
-                // no break
-            case 'modelFQCN':
-                if (isset($this->associatedModel)) {
-                    return $this->associatedModel;
-                }
-                // no break
-            case 'weightTotal':
-                return round($this->weight * $this->qty, $decimals);
+        if (isset($this->associatedModel)) {
+            return (new $this->associatedModel())->find($this->id);
         }
 
-        $class = new ReflectionClass(config('cart.calculator', DefaultCalculator::class));
-        if (!$class->implementsInterface(Calculator::class)) {
-            throw new InvalidCalculatorException('The configured Calculator seems to be invalid. Calculators have to implement the Calculator Contract.');
-        }
+        return null;
+    }
 
-        return call_user_func($class->getName().'::getAttribute', $attribute, $this);
+    /**
+     * This will is the price of the CartItem considering the set quantity. If you need the raw price
+     * then simply access the price member.
+     */
+    public function price(): Money
+    {
+        return $this->price()->multiply($this->qty);
+    }
+
+    /**
+     * This is the discount granted for this CartItem. It is based on the given price and, in case
+     * discount is a float, multiplied or, in case it is an absolute Money, subtracted. It will return
+     * a minimum value of 0.
+     */
+    public function discount(): Money
+    {
+        if ($this->discount instanceof Money) {
+            return $this->price()->subtract($this->discountRate);
+        } else {
+            return $this->price()->multiply($this->discountRate, config('cart.rounding', Money::ROUND_UP));
+        }
+    }
+
+    /**
+     * This is the final price of the CartItem but without any tax applied. This does on the
+     * other hand include any discounts.
+     */
+    public function subtotal(): Money
+    {
+        return Money::max(new Money(0, $this->price()->getCurrency()), $this->price()->add($this->discount()));
+    }
+
+    /**
+     * This is the tax, based on the subtotal (all previous calculations) and set tax rate
+     */
+    public function tax(): Money
+    {
+        return $this->subtotal()->multiply($this->taxRate + 1, config('cart.rounding', Money::ROUND_UP));
+    }
+
+    /**
+     * This is the total price, consisting of the subtotal and tax applied.
+     */
+    public function total(): Money
+    {
+        return $this->subtotal()->add($this->tax());
+    }
+
+    /**
+     * This is the total price, consisting of the subtotal and tax applied.
+     */
+    public function weight(): int
+    {
+        return $this->qty * $this->weight;
     }
 
     /**
@@ -254,13 +259,16 @@ class CartItem implements Arrayable, Jsonable
             'rowId'    => $this->rowId,
             'id'       => $this->id,
             'name'     => $this->name,
-            'qty'      => $this->qty,
             'price'    => self::formatMoney($this->price),
+            'qty'      => $this->qty,
             'weight'   => $this->weight,
             'options'  => $this->options->toArray(),
-            'discount' => self::formatMoney($this->discount),
-            'tax'      => self::formatMoney($this->tax),
-            'subtotal' => self::formatMoney($this->subtotal),
+
+            /* Calculated attributes */
+            'discount' => self::formatMoney($this->discount()),
+            'subtotal' => self::formatMoney($this->subtotal()),
+            'tax'      => self::formatMoney($this->tax()),
+            'total' => self::formatMoney($this->total()),
         ];
     }
 
