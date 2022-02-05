@@ -130,7 +130,7 @@ class Cart
                 throw new InvalidArgumentException('$nameOrQty must be of int (quantity) or null when adding with raw parameters');
             }
             
-            return $this->addCartItem(CartItem::fromAttributes($id, $nameOrQty, $price, $qtyOrOptions ?: 1, $weight, $options ?: new CartItemOptions([])));
+            return $this->addCartItem(CartItem::fromAttributes($id, $nameOrQty, $price, $qtyOrOptions ?: 1, $weight ?: 0, $options ?: new CartItemOptions([])));
         }
         /* Also allow passing a Buyable instance, get data from the instance rather than parameters */
         else if ($id instanceof Buyable) {
