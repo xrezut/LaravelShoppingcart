@@ -3,18 +3,6 @@
 use Money\Money;
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Gross price as base price
-    |--------------------------------------------------------------------------
-    |
-    | This default value is used to select the method to calculate prices and taxes
-    | If true the item price is managed as a gross price, so taxes will be calculated by separation/exclusion
-    |
-    */
-
-    'calculator' => \Gloudemans\Shoppingcart\Calculation\DefaultCalculator::class,
     
     /*
     |--------------------------------------------------------------------------

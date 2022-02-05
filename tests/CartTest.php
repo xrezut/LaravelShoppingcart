@@ -1306,23 +1306,6 @@ class CartTest extends TestCase
         });
     }
 
-    /** @test */
-    public function it_use_gross_price_as_base_price()
-    {
-        $cart = $this->getCartDiscount(0);
-        config(['cart.calculator' => GrossPrice::class]);
-
-        $cartItem = $cart->add(new BuyableProduct([
-            'name'  => 'First item',
-            'price' => 100,
-        ]), 2);
-
-        $cart->setGlobalTax(22);
-
-        // check net price
-        $this->assertEquals(new Money(8197, new Currency('USD')), $cartItem->priceNet);
-    }
-
     /**
      * Get an instance of the cart.
      *
