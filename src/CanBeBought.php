@@ -3,6 +3,7 @@
 namespace Gloudemans\Shoppingcart;
 
 use Money\Money;
+use Money\Currency;
 
 trait CanBeBought
 {
@@ -38,7 +39,7 @@ trait CanBeBought
     public function getBuyablePrice(): Money
     {
         if (($price = $this->getAttribute('price')) && ($currency = $this->getAttribute('currency'))) {
-            return new Money($price, $currency);
+            return new Money($price, new Currency($currency));
         }
     }
 
