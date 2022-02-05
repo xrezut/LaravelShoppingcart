@@ -23,10 +23,11 @@ class BuyableProduct extends Model implements Buyable
     ];
 
     protected $attributes = [
-        'id'     => 1,
-        'name'   => 'Item name',
-        'price'  => 10.00,
-        'weight' => 0,
+        'id'       => 1,
+        'name'     => 'Item name',
+        'price'    => 10.00,
+        'currency' => 'USD',
+        'weight'   => 0,
     ];
 
     /**
