@@ -89,16 +89,7 @@ class CartItem implements Arrayable, Jsonable
      */
     public ?string $instance = null;
 
-    /**
-     * CartItem constructor.
-     *
-     * @param int|string $id
-     * @param string     $name
-     * @param float      $price
-     * @param float      $weight
-     * @param array      $options
-     */
-    public function __construct($id, string $name, Money $price, int $qty = 1, int $weight = 0, ?CartItemOptions $options = null)
+    public function __construct(int|string $id, string $name, Money $price, int $qty = 1, int $weight = 0, ?CartItemOptions $options = null)
     {
         if (!is_string($id) && !is_int($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
