@@ -1015,20 +1015,6 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_will_destroy_the_cart_when_the_user_logs_out_and_the_config_setting_was_set_to_true()
-    {
-        $this->app['config']->set('cart.destroy_on_logout', true);
-
-        $this->app->instance(SessionManager::class, Mockery::mock(SessionManager::class, function ($mock) {
-            $mock->shouldReceive('forget')->once()->with('cart');
-        }));
-
-        $user = Mockery::mock(Authenticatable::class);
-
-        \Auth::guard('web')->logout();
-    }
-
-    /** @test */
     public function can_change_tax_globally()
     {
         $cart = $this->getCart();
