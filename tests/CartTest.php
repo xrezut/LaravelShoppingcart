@@ -1428,7 +1428,7 @@ class CartTest extends TestCase
         // check item price total
         $this->assertEquals(190, $cartItem->priceTotal);
         // check that the sum of cart subvalues matches the total (in order to avoid cart summary to looks wrong)
-        $this->assertEquals($cart->total(), $cart->subtotal()->add($cart->tax());
+        $this->assertEquals($cart->total(), $cart->subtotal()->add($cart->tax()));
     }
 
     /**
