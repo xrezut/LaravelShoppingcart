@@ -391,7 +391,7 @@ class CartTest extends TestCase
 
         $cart->add(new BuyableProduct(), 1, ['color' => 'red']);
 
-        $cart->update('ea65e0bdcd1967c4b3149e9e780177c0', ['options' => ['color' => 'blue']]);
+        $cart->update('ea65e0bdcd1967c4b3149e9e780177c0', ['options' => new CartItemOptions(['color' => 'blue'])]);
 
         $this->assertItemsInCart(1, $cart);
         $this->assertEquals('7e70a1e9aaadd18c72921a07aae5d011', $cart->content()->first()->rowId);
@@ -406,7 +406,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(), 1, ['color' => 'red']);
         $cart->add(new BuyableProduct(), 1, ['color' => 'blue']);
 
-        $cart->update('7e70a1e9aaadd18c72921a07aae5d011', ['options' => ['color' => 'red']]);
+        $cart->update('7e70a1e9aaadd18c72921a07aae5d011', ['options' => new CartItemOptions(['color' => 'red'])]);
 
         $this->assertItemsInCart(2, $cart);
         $this->assertRowsInCart(1, $cart);
@@ -421,7 +421,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct(), 1, ['color' => 'green']);
         $cart->add(new BuyableProduct(), 1, ['color' => 'blue']);
 
-        $cart->update($cart->content()->values()[1]->rowId, ['options' => ['color' => 'yellow']]);
+        $cart->update($cart->content()->values()[1]->rowId, ['options' => new CartItemOptions(['color' => 'yellow'])]);
 
         $this->assertRowsInCart(3, $cart);
         $this->assertEquals('yellow', $cart->content()->values()[1]->options->color);
