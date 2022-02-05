@@ -264,12 +264,12 @@ class CartItem implements Arrayable, Jsonable
             'id'       => $this->id,
             'name'     => $this->name,
             'qty'      => $this->qty,
-            'price'    => $this->price,
+            'price'    => self::formatMoney($this->price),
             'weight'   => $this->weight,
             'options'  => $this->options->toArray(),
-            'discount' => $this->discount,
-            'tax'      => $this->tax,
-            'subtotal' => $this->subtotal,
+            'discount' => self::formatMoney($this->discount),
+            'tax'      => self::formatMoney($this->tax),
+            'subtotal' => self::formatMoney($this->subtotal),
         ];
     }
 
@@ -288,7 +288,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Generate a unique id for the cart item.
      */
-    private function formatMoney(Money $money) : string
+    private static function formatMoney(Money $money) : string
     {
         return (new DecimalMoneyFormatter(new ISOCurrencies()))->format($money);
     }
