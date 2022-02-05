@@ -5,6 +5,7 @@ namespace Gloudemans\Shoppingcart;
 use Carbon\Carbon;
 use Money\Money;
 use Closure;
+use Iterable;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Gloudemans\Shoppingcart\Contracts\InstanceIdentifier;
 use Gloudemans\Shoppingcart\Exceptions\CartAlreadyStoredException;
@@ -117,17 +118,26 @@ class Cart
      *
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function add($id, ?string $name = null, ?int $qty = null, ?Money $price = null, ?int $weight = null, array $options = []): CartItem
+    public function add(int|string|Buyable|Iterable $id, ?string $name = null, ?int $qty = null, ?Money $price = null, ?int $weight = null, array $options = []): CartItem
     {
-        if ($this->isMulti($id)) {
+        /* Allow adding a CartItem by raw parameters */
+        if (is_int($id) || is_string($id)) {
+            return $this->addCartItem($this->createCartItem($id, $name, $qty, $price, $weight, $options));
+        }
+        /* Also allow passing a Buyable instance, get data from the instance rather than parameters */
+        else if ($id instanceof Buyable) {
+            return $this->addCartItem($this->createCartItem($id);
+        }
+        /* Also allow passing multiple definitions at the same time, simply call same method and collec return value */
+        else if (is_iterable($id)) {
             return array_map(function ($item) {
                 return $this->add($item);
             }, $id);
         }
-
-        $cartItem = $this->createCartItem($id, $name, $qty, $price, $weight, $options);
-
-        return $this->addCartItem($cartItem);
+        /* Due to PHP8 union types this should never happen */
+        else {
+            throw new InvalidArgumentException('$id must be of type int|string|Buyable|Iterable')
+        }
     }
 
     /**
