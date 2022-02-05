@@ -4,8 +4,8 @@ namespace Gloudemans\Shoppingcart;
 
 use Carbon\Carbon;
 use Money\Money;
-use Closure;
-use Iterable;
+use \Closure;
+use \Iterable;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Gloudemans\Shoppingcart\Contracts\InstanceIdentifier;
 use Gloudemans\Shoppingcart\Exceptions\CartAlreadyStoredException;
