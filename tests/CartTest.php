@@ -3,6 +3,8 @@
 namespace Gloudemans\Tests\Shoppingcart;
 
 use Carbon\Carbon;
+use Money\Money;
+use Money\Currency;
 use Gloudemans\Shoppingcart\Calculation\GrossPrice;
 use Gloudemans\Shoppingcart\Cart;
 use Gloudemans\Shoppingcart\CartItem;
@@ -170,7 +172,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(1, 'Test item', 1, 10.00);
+        $cart->add(1, 'Test item', 1, new Money(10.00, new Currency('USD')));
 
         $this->assertEquals(1, $cart->count());
 
@@ -184,7 +186,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(['id' => 1, 'name' => 'Test item', 'qty' => 1, 'price' => 10.00, 'weight' => 550]);
+        $cart->add(['id' => 1, 'name' => 'Test item', 'qty' => 1, 'price' => new Money(10.00, new Currency('USD')), 'weight' => 550]);
 
         $this->assertEquals(1, $cart->count());
 
@@ -199,8 +201,8 @@ class CartTest extends TestCase
         $cart = $this->getCart();
 
         $cart->add([
-            ['id' => 1, 'name' => 'Test item 1', 'qty' => 1, 'price' => 10.00, 'weight' => 550],
-            ['id' => 2, 'name' => 'Test item 2', 'qty' => 1, 'price' => 10.00, 'weight' => 550],
+            ['id' => 1, 'name' => 'Test item 1', 'qty' => 1, 'price' => new Money(10.00, new Currency('USD')), 'weight' => 550],
+            ['id' => 2, 'name' => 'Test item 2', 'qty' => 1, 'price' => new Money(10.00, new Currency('USD')), 'weight' => 550],
         ]);
 
         $this->assertEquals(2, $cart->count());
@@ -238,7 +240,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(null, 'Some title', 1, 10.00);
+        $cart->add(null, 'Some title', 1, new Money(10.00, new Currency('USD')));
     }
 
     /**
@@ -251,7 +253,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(1, 'Some title', 'invalid', 10.00);
+        $cart->add(1, 'Some title', 'invalid', new Money(10.00, new Currency('USD')));
     }
 
     /**
@@ -277,7 +279,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(1, 'Some title', 1, 10.00, 'invalid');
+        $cart->add(1, 'Some title', 1, new Money(10.00, new Currency('USD')), 'invalid');
     }
 
     /** @test */
@@ -662,11 +664,11 @@ class CartTest extends TestCase
 
         $cart->add(new BuyableProduct([
             'name' => 'Some item',
-        ]), 1, ['color' => 'red']);
+        ]), 1, new CartItemOptions(['color' => 'red']));
         $cart->add(new BuyableProduct([
             'id'   => 2,
             'name' => 'Another item',
-        ]), 1, ['color' => 'blue']);
+        ]), 1, new CartItemOptions(['color' => 'blue']));
 
         $cartItem = $cart->search(function ($cartItem, $rowId) {
             return $cartItem->options->color == 'red';
@@ -695,7 +697,7 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(1, 'Test item', 1, 10.00);
+        $cart->add(1, 'Test item', 1, new Money(10.00, new Currency('USD')));
 
         $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', new ProductModel());
 
@@ -714,7 +716,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(1, 'Test item', 1, 10.00);
+        $cart->add(1, 'Test item', 1, new Money(10.00, new Currency('USD')));
 
         $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', 'SomeModel');
     }
@@ -724,7 +726,7 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(1, 'Test item', 1, 10.00);
+        $cart->add(1, 'Test item', 1, new Money(10.00, new Currency('USD')));
 
         $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', new ProductModel());
 
@@ -1421,7 +1423,7 @@ class CartTest extends TestCase
         // https://github.com/bumbummen99/LaravelShoppingcart/pull/5
         $cart = $this->getCart();
 
-        $cartItem = $cart->add('293ad', 'Product 1', 1, 9.99, 550, ['size' => 'large']);
+        $cartItem = $cart->add('293ad', 'Product 1', 1, new Money(10.00, new Currency('USD')), 550, new CartItemOptions(['size' => 'large']));
 
         $this->assertEquals(550, $cartItem->weight);
         $this->assertTrue($cartItem->options->has('size'));
@@ -1662,7 +1664,7 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct([
             'name'  => 'first item',
             'price' => 1000,
-        ]), $qty = 5);
+        ]), 5);
         $this->assertEquals(5000, $cart->priceTotalFloat());
     }
 
