@@ -247,7 +247,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @param int|string $id
      */
-    public static function fromAttributes($id, string $name, Money $price, int $weight, array $options = []) : self
+    public static function fromAttributes(int|string $id, string $name, Money $price, int $qty, int $weight, array $options = []) : self
     {
         return new self($id, $name, $price, $weight, $options);
     }
