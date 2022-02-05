@@ -149,9 +149,18 @@ class Cart
         }
         /* Also allow passing multiple definitions at the same time, simply call same method and collec return value */
         else if (is_iterable($id)) {
-            return array_map(function ($item) {
-                return $this->add($item);
-            }, $id);
+            /* Check if this iterable contains instances */
+            if (is_array(head($item)) || head($item) instanceof Buyable) {
+                return array_map(function ($item) {
+                    return $this->add($item);
+                }, $id);
+            }
+            /* Treat the array itself as an instance */
+            else {
+                $cartItem = CartItem::fromArray($id);
+                
+                return $this->addCartItem($cartItem);
+            }
         }
         /* Due to PHP8 union types this should never happen */
         else {
