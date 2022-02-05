@@ -611,7 +611,7 @@ class DefaultCalculator implements Calculator
 {
     public static function getAttribute(string $attribute, CartItem $cartItem)
     {
-        $decimals = config('cart.format.decimals', 2);
+        $decimals = Config::get('cart.format.decimals', 2);
 
         switch ($attribute) {
             case 'discount':

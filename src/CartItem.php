@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Config;
 use Money\Money;
 use Money\Formatter\DecimalMoneyFormatter;
 use Money\Currencies\ISOCurrencies;
@@ -164,8 +165,8 @@ class CartItem implements Arrayable, Jsonable
     }
 
     /**
-     * This will is the price of the CartItem considering the set quantity. If you need the raw price
-     * then simply access the price member.
+     * This will is the price of the CartItem considering the set quantity. If you need the single 
+     * price just set the parameter to true.
      */
     public function price(): Money
     {
@@ -180,9 +181,9 @@ class CartItem implements Arrayable, Jsonable
     public function discount(): Money
     {
         if ($this->discount instanceof Money) {
-            return $this->price()->subtract($this->discountRate);
+            return $this->price()->subtract($this->discount);
         } else {
-            return $this->price()->multiply($this->discountRate, config('cart.rounding', Money::ROUND_UP));
+            return $this->price()->multiply($this->discount, Config::get('cart.rounding', Money::ROUND_UP));
         }
     }
 
@@ -200,7 +201,7 @@ class CartItem implements Arrayable, Jsonable
      */
     public function tax(): Money
     {
-        return $this->subtotal()->multiply($this->taxRate + 1, config('cart.rounding', Money::ROUND_UP));
+        return $this->subtotal()->multiply($this->taxRate + 1, Config::get('cart.rounding', Money::ROUND_UP));
     }
 
     /**

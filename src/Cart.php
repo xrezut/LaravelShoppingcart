@@ -72,7 +72,7 @@ class Cart
     {
         $this->session = $session;
         $this->events = $events;
-        $this->taxRate = config('cart.tax');
+        $this->taxRate = Config::get('cart.tax');
 
         $this->instance(self::DEFAULT_INSTANCE);
     }
@@ -747,7 +747,7 @@ class Cart
      */
     private static function getTableName(): string
     {
-        return config('cart.database.table', 'shoppingcart');
+        return Config::get('cart.database.table', 'shoppingcart');
     }
 
     /**
@@ -755,9 +755,9 @@ class Cart
      */
     private function getConnectionName(): ?string
     {
-        $connection = config('cart.database.connection');
+        $connection = Config::get('cart.database.connection');
 
-        return is_null($connection) ? config('database.default') : $connection;
+        return is_null($connection) ? Config::get('database.default') : $connection;
     }
 
     /**
