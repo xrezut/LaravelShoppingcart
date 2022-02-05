@@ -355,7 +355,7 @@ class Cart
     {
         return $this->getContent()->reduce(function (Money $total, CartItem $cartItem) {
             return $total->add($cartItem->total);
-        }, new Money(0, 'USD'));
+        }, new Money(0, new Currency('USD')));
     }
     
     /**
@@ -365,7 +365,7 @@ class Cart
     {
         return $this->getContent()->reduce(function (Money $tax, CartItem $cartItem) {
             return $tax->add($cartItem->taxTotal);
-        }, new Money(0, 'USD'));
+        }, new Money(0, new Currency('USD')));
     }
 
     /**
@@ -375,7 +375,7 @@ class Cart
     {
         return $this->getContent()->reduce(function (Money $subTotal, CartItem $cartItem) {
             return $subTotal->add($cartItem->subtotal);
-        }, new Money(0, 'USD'));
+        }, new Money(0, new Currency('USD')));
     }
 
     /**
@@ -387,7 +387,7 @@ class Cart
     {
         return $this->getContent()->reduce(function (Money $discount, CartItem $cartItem) {
             return $discount->add($cartItem->discountTotal);
-        }, new Money(0, 'USD'));
+        }, new Money(0, new Currency('USD')));
     }
 
     /**
@@ -397,7 +397,7 @@ class Cart
     {
         return $this->getContent()->reduce(function (Money $initial, CartItem $cartItem) {
             return $initial->add($cartItem->price->multiply($cartItem->qty));
-        }, new Money(0, 'USD'));
+        }, new Money(0, new Currency('USD')));
     }
 
     /**
@@ -407,7 +407,7 @@ class Cart
     {
         return $this->getContent()->reduce(function (Money $initial, CartItem $cartItem) {
             return $initial->add($cartItem->priceTotal);
-        }, new Money(0, 'USD'));
+        }, new Money(0, new Currency('USD')));
     }
 
     /**
