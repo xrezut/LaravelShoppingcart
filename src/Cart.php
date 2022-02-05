@@ -171,7 +171,7 @@ class Cart
      */
     public function addCartItem(CartItem $item, bool $keepDiscount = false, bool $keepTax = false, bool $dispatchEvent = true): CartItem
     {
-        $cartItem->setInstance($this->currentInstance());
+        $item->setInstance($this->currentInstance());
         
         if (!$keepDiscount) {
             $item->setDiscountRate($this->discount);
