@@ -24,7 +24,7 @@ class CartItemTest extends TestCase
     /** @test */
     public function it_can_be_cast_to_an_array()
     {
-        $cartItem = new CartItem(1, 'Some item', new Money(10.00), 550, ['size' => 'XL', 'color' => 'red']);
+        $cartItem = new CartItem(1, 'Some item', new Money(10.00, 'USD'), 550, ['size' => 'XL', 'color' => 'red']);
         $cartItem->setQuantity(2);
 
         $this->assertEquals([
@@ -47,7 +47,7 @@ class CartItemTest extends TestCase
     /** @test */
     public function it_can_be_cast_to_json()
     {
-        $cartItem = new CartItem(1, 'Some item', new Money(10.00), 550, ['size' => 'XL', 'color' => 'red']);
+        $cartItem = new CartItem(1, 'Some item', new Money(10.00, 'USD'), 550, ['size' => 'XL', 'color' => 'red']);
         $cartItem->setQuantity(2);
 
         $this->assertJson($cartItem->toJson());
@@ -60,7 +60,7 @@ class CartItemTest extends TestCase
     /** @test */
     public function it_formats_price_total_correctly()
     {
-        $cartItem = new CartItem(1, 'Some item', new Money(10.00), 550, ['size' => 'XL', 'color' => 'red']);
+        $cartItem = new CartItem(1, 'Some item', new Money(10.00, 'USD'), 550, ['size' => 'XL', 'color' => 'red']);
         $cartItem->setQuantity(2);
 
         $this->assertSame('20.00', $cartItem->priceTotal());
