@@ -1423,7 +1423,7 @@ class CartTest extends TestCase
         $cart->setGlobalTax(22);
 
         // check total
-        $this->assertEquals('254,12', $cart->total());
+        $this->assertEquals(new Money('254.12', new Currency('USD')), $cart->total());
 
         // check item price total
         $this->assertEquals(190, $cartItem->priceTotal);
