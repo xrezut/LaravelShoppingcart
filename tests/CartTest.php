@@ -537,7 +537,7 @@ class CartTest extends TestCase
                 'subtotal' => '10.00',
                 'options'  => [],
                 'discount' => '0',
-                'weight'   => '0.00',
+                'weight'   => 0,
             ],
             '370d08585360f5c568b18d1f2e4ca1df' => [
                 'rowId'    => '370d08585360f5c568b18d1f2e4ca1df',
@@ -549,7 +549,7 @@ class CartTest extends TestCase
                 'subtotal' => '10.00',
                 'options'  => [],
                 'discount' => '0',
-                'weight'   => '0.00',
+                'weight'   => 0,
             ],
         ], $content->toArray());
     }
