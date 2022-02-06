@@ -30,7 +30,9 @@ class CartTest extends TestCase
      */
     protected function getPackageProviders($app)
     {
-        return [ShoppingcartServiceProvider::class];
+        return [
+            ShoppingcartServiceProvider::class
+        ];
     }
 
     /**
@@ -521,6 +523,9 @@ class CartTest extends TestCase
         $cart->add(new BuyableProduct([
             'id' => 2,
         ]));
+
+        $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
+        $this->assertEquals(config('cart.tax'), $cartItem->taxRate);
 
         $content = $cart->content();
 
@@ -1120,7 +1125,7 @@ class CartTest extends TestCase
             'name' => 'First item',
         ]), 1);
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
-        
+
         $cart->setDiscount('027c91341fd5cf4d2579b49c4b6a90da', 0.5);
 
         $this->assertEquals(0.5, $cartItem->discount);
