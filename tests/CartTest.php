@@ -12,6 +12,7 @@ use Gloudemans\Tests\Shoppingcart\Fixtures\BuyableProductTrait;
 use Gloudemans\Tests\Shoppingcart\Fixtures\Identifiable;
 use Gloudemans\Tests\Shoppingcart\Fixtures\ProductModel;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Money\Currency;
 use Money\Money;
@@ -834,7 +835,7 @@ class CartTest extends TestCase
 
         $serialized = serialize($cart->content());
 
-        $this->assertDatabaseHas('shoppingcart', ['identifier' => $identifier, 'instance' => 'default', 'content' => $serialized]);
+        $this->assertDatabaseHas(Config::get('cart.database.tables.cart'), ['identifier' => $identifier, 'instance' => 'default', 'content' => $serialized]);
     }
 
     /** @test */
@@ -931,7 +932,7 @@ class CartTest extends TestCase
 
         $this->assertItemsInCart(1, $cart);
 
-        $this->assertDatabaseMissing('shoppingcart', ['identifier' => $identifier, 'instance' => 'default']);
+        $this->assertDatabaseMissing(Config::get('cart.database.tables.cart'), ['identifier' => $identifier, 'instance' => 'default']);
     }
 
     /** @test */
@@ -1308,9 +1309,9 @@ class CartTest extends TestCase
 
         $newInstanceSerialized = serialize($newInstance->content());
 
-        $this->assertDatabaseHas('shoppingcart', ['identifier' => $identifier, 'instance' => Cart::DEFAULT_INSTANCE, 'content' => $serialized]);
+        $this->assertDatabaseHas(Config::get('cart.database.tables.cart'), ['identifier' => $identifier, 'instance' => Cart::DEFAULT_INSTANCE, 'content' => $serialized]);
 
-        $this->assertDatabaseHas('shoppingcart', ['identifier' => $identifier, 'instance' => $instanceName, 'content' => $newInstanceSerialized]);
+        $this->assertDatabaseHas(Config::get('cart.database.tables.cart'), ['identifier' => $identifier, 'instance' => $instanceName, 'content' => $newInstanceSerialized]);
     }
 
     /** @test */
@@ -1345,7 +1346,7 @@ class CartTest extends TestCase
         $cart->store($identifier = 'test');
         $cart->erase($identifier);
         Event::assertDispatched('cart.erased');
-        $this->assertDatabaseMissing('shoppingcart', ['identifier' => $identifier, 'instance' => Cart::DEFAULT_INSTANCE]);
+        $this->assertDatabaseMissing(Config::get('cart.database.tables.cart'), ['identifier' => $identifier, 'instance' => Cart::DEFAULT_INSTANCE]);
     }
 
     /**
