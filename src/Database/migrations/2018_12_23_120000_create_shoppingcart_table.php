@@ -13,12 +13,20 @@ class CreateShoppingcartTable extends Migration
     public function up()
     {
         Schema::create(Config::get('cart.database.tables.cart'), function (Blueprint $table) {
-            $table->string('identifier');
-            $table->string('instance');
-            $table->longText('content');
-            $table->nullableTimestamps();
+            /* Primary identifier of the cart, i.e. uinque user id */
+            $table->string('identifier')->index();
 
+            /* Instance of the cart to allow for multiple carts per identifier */
+            $table->string('instance')->index();
+
+            /* Make primary key a combination of booth */
             $table->primary(['identifier', 'instance']);
+
+            /* Content of the cart */
+            $table->longText('content');
+
+            /* Allow empty timestamps */
+            $table->nullableTimestamps();
         });
     }
 
