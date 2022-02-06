@@ -22,34 +22,27 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php-versions }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
+          extensions: bcmath,gmp,intl
         env:
           runner: ubuntu-18.04
-          
-      - name: Use appropiate Laravel version
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use appropiate Laravel version in composer.json (without installing)
         run: |
-             composer require "laravel/framework:${{ matrix.laravel-version }}" --no-interaction --no-update
+             composer require --no-update --no-interaction "laravel/framework:${{ matrix.laravel-version }}"
+             composer validate
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate
-
-      - name: Get composer cache directory
-        id: composercache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache Composer packages
-        id: composer-cache
+      - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: ${{ steps.composercache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel-version }}-php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Install composer packages
         run: composer install --prefer-dist --no-interaction

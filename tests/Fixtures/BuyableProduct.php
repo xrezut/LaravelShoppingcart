@@ -2,8 +2,11 @@
 
 namespace Gloudemans\Tests\Shoppingcart\Fixtures;
 
+use Gloudemans\Shoppingcart\CartItemOptions;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
+use Money\Currency;
+use Money\Money;
 
 class BuyableProduct extends Model implements Buyable
 {
@@ -18,14 +21,16 @@ class BuyableProduct extends Model implements Buyable
         'title',
         'description',
         'price',
+        'currency',
         'weight',
     ];
 
     protected $attributes = [
-        'id'     => 1,
-        'name'   => 'Item name',
-        'price'  => 10.00,
-        'weight' => 0,
+        'id'       => 1,
+        'name'     => 'Item name',
+        'price'    => 1000,
+        'currency' => 'USD',
+        'weight'   => 0,
     ];
 
     /**
@@ -33,7 +38,7 @@ class BuyableProduct extends Model implements Buyable
      *
      * @return int|string
      */
-    public function getBuyableIdentifier()
+    public function getBuyableIdentifier(CartItemOptions $options)
     {
         return $this->id;
     }
@@ -43,27 +48,23 @@ class BuyableProduct extends Model implements Buyable
      *
      * @return string
      */
-    public function getBuyableDescription() : ?string
+    public function getBuyableDescription(CartItemOptions $options): ?string
     {
         return $this->name;
     }
 
     /**
      * Get the price of the Buyable item.
-     *
-     * @return float
      */
-    public function getBuyablePrice()
+    public function getBuyablePrice(CartItemOptions $options): Money
     {
-        return $this->price;
+        return new Money($this->price, new Currency($this->currency));
     }
 
     /**
      * Get the price of the Buyable item.
-     *
-     * @return float
      */
-    public function getBuyableWeight()
+    public function getBuyableWeight(CartItemOptions $options): int
     {
         return $this->weight;
     }

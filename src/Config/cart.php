@@ -1,10 +1,12 @@
 <?php
 
+use Money\Money;
+
 return [
 
     /*
     |--------------------------------------------------------------------------
-    | Gross price as base price
+    | Rounding strategy
     |--------------------------------------------------------------------------
     |
     | This default value is used to select the method to calculate prices and taxes
@@ -12,7 +14,7 @@ return [
     |
     */
 
-    'calculator' => \Gloudemans\Shoppingcart\Calculation\DefaultCalculator::class,
+    'rounding' => Money::ROUND_UP,
 
     /*
     |--------------------------------------------------------------------------
@@ -24,7 +26,7 @@ return [
     |
     */
 
-    'tax' => 21,
+    'tax' => 0.21,
 
     /*
     |--------------------------------------------------------------------------
@@ -43,18 +45,6 @@ return [
         'table' => 'shoppingcart',
 
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Destroy the cart on user logout
-    |--------------------------------------------------------------------------
-    |
-    | When this option is set to 'true' the cart will automatically
-    | destroy all cart instances when the user logs out.
-    |
-    */
-
-    'destroy_on_logout' => false,
 
     /*
     |--------------------------------------------------------------------------

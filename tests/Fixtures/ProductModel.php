@@ -2,11 +2,13 @@
 
 namespace Gloudemans\Tests\Shoppingcart\Fixtures;
 
-class ProductModel
+use Illuminate\Database\Eloquent\Model;
+
+class ProductModel extends Model
 {
     public $someValue = 'Some value';
 
-    public function find($id) : self
+    public function find($id): self
     {
         return $this;
     }

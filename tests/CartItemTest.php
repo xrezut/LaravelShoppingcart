@@ -3,7 +3,10 @@
 namespace Gloudemans\Tests\Shoppingcart;
 
 use Gloudemans\Shoppingcart\CartItem;
+use Gloudemans\Shoppingcart\CartItemOptions;
 use Gloudemans\Shoppingcart\ShoppingcartServiceProvider;
+use Money\Currency;
+use Money\Money;
 use Orchestra\Testbench\TestCase;
 
 class CartItemTest extends TestCase
@@ -23,45 +26,35 @@ class CartItemTest extends TestCase
     /** @test */
     public function it_can_be_cast_to_an_array()
     {
-        $cartItem = new CartItem(1, 'Some item', 10.00, 550, ['size' => 'XL', 'color' => 'red']);
-        $cartItem->setQuantity(2);
+        $cartItem = new CartItem(1, 'Some item', new Money(1000, new Currency('USD')), 2, 550, new CartItemOptions(['size' => 'XL', 'color' => 'red']));
 
         $this->assertEquals([
             'id'      => 1,
             'name'    => 'Some item',
-            'price'   => 10.00,
+            'price'   => '10.00',
             'rowId'   => '07d5da5550494c62daf9993cf954303f',
             'qty'     => 2,
             'options' => [
                 'size'  => 'XL',
                 'color' => 'red',
             ],
-            'tax'      => 0,
-            'subtotal' => 20.00,
-            'discount' => 0.0,
-            'weight'   => 550.0,
+            'tax'      => '0.00',
+            'subtotal' => '20.00',
+            'total'    => '20.00',
+            'discount' => '0.00',
+            'weight'   => 550,
         ], $cartItem->toArray());
     }
 
     /** @test */
     public function it_can_be_cast_to_json()
     {
-        $cartItem = new CartItem(1, 'Some item', 10.00, 550, ['size' => 'XL', 'color' => 'red']);
-        $cartItem->setQuantity(2);
+        $cartItem = new CartItem(1, 'Some item', new Money(1000, new Currency('USD')), 2, 550, new CartItemOptions(['size' => 'XL', 'color' => 'red']));
 
         $this->assertJson($cartItem->toJson());
 
-        $json = '{"rowId":"07d5da5550494c62daf9993cf954303f","id":1,"name":"Some item","qty":2,"price":10,"weight":550,"options":{"size":"XL","color":"red"},"discount":0,"tax":0,"subtotal":20}';
+        $json = '{"rowId":"07d5da5550494c62daf9993cf954303f","id":1,"name":"Some item","price":"10.00","qty":2,"weight":550,"options":{"size":"XL","color":"red"},"discount":"0.00","subtotal":"20.00","tax":"0.00","total":"20.00"}';
 
         $this->assertEquals($json, $cartItem->toJson());
-    }
-
-    /** @test */
-    public function it_formats_price_total_correctly()
-    {
-        $cartItem = new CartItem(1, 'Some item', 10.00, 550, ['size' => 'XL', 'color' => 'red']);
-        $cartItem->setQuantity(2);
-
-        $this->assertSame('20.00', $cartItem->priceTotal());
     }
 }
