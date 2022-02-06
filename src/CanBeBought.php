@@ -54,7 +54,7 @@ trait CanBeBought
 
         return 0;
     }
-    
+
     /**
      * Get the taxRate of the Buyable item.
      */
