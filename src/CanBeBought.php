@@ -58,7 +58,7 @@ trait CanBeBought
     /**
      * Get the taxRate of the Buyable item.
      */
-    public function getBuyableTaxRate($options = null): float
+    public function getBuyableTaxRate(CartItemOptions $options): float
     {
         if (($taxRate = $this->getAttribute('taxRate'))) {
             return $taxRate;
