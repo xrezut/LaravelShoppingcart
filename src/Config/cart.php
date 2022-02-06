@@ -42,7 +42,10 @@ return [
 
         'connection' => null,
 
-        'table' => 'shoppingcart',
+        'tables' => [
+            'cart' => 'cart',
+            'cart_item' => 'cart_item'
+        ],
 
     ],
 
