@@ -8,7 +8,7 @@ class ProductModel extends Model
 {
     public $someValue = 'Some value';
 
-    public function find($id) : self
+    public function find($id): self
     {
         return $this;
     }

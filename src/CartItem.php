@@ -8,9 +8,9 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
-use Money\Money;
-use Money\Formatter\DecimalMoneyFormatter;
 use Money\Currencies\ISOCurrencies;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Money;
 
 class CartItem implements Arrayable, Jsonable
 {
@@ -118,7 +118,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @param mixed $model
      */
-    public function associate(string|Model $model) : self
+    public function associate(string|Model $model): self
     {
         $this->associatedModel = is_string($model) ? $model : get_class($model);
 
@@ -128,7 +128,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Set the tax rate.
      */
-    public function setTaxRate(float $taxRate) : self
+    public function setTaxRate(float $taxRate): self
     {
         $this->taxRate = $taxRate;
 
@@ -138,7 +138,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Set the discount rate.
      */
-    public function setDiscount(float|Money $discount) : self
+    public function setDiscount(float|Money $discount): self
     {
         $this->discount = $discount;
 
@@ -148,7 +148,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Set cart instance.
      */
-    public function setInstance(?string $instance) : self
+    public function setInstance(?string $instance): self
     {
         $this->instance = $instance;
 
@@ -165,7 +165,7 @@ class CartItem implements Arrayable, Jsonable
     }
 
     /**
-     * This will is the price of the CartItem considering the set quantity. If you need the single 
+     * This will is the price of the CartItem considering the set quantity. If you need the single
      * price just set the parameter to true.
      */
     public function price(): Money
@@ -197,7 +197,7 @@ class CartItem implements Arrayable, Jsonable
     }
 
     /**
-     * This is the tax, based on the subtotal (all previous calculations) and set tax rate
+     * This is the tax, based on the subtotal (all previous calculations) and set tax rate.
      */
     public function tax(): Money
     {
@@ -223,18 +223,20 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Create a new instance from a Buyable.
      */
-    public static function fromBuyable(Buyable $item, int $qty = 1, ?CartItemOptions $options = null) : self
+    public static function fromBuyable(Buyable $item, int $qty = 1, ?CartItemOptions $options = null): self
     {
         $options = $options ?: new CartItemOptions([]);
+
         return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $qty, $item->getBuyableWeight($options), $options);
     }
 
     /**
      * Create a new instance from the given array.
      */
-    public static function fromArray(array $attributes) : self
+    public static function fromArray(array $attributes): self
     {
         $options = new CartItemOptions(Arr::get($attributes, 'options', []));
+
         return new self($attributes['id'], $attributes['name'], $attributes['price'], $attributes['qty'], $attributes['weight'], $options);
     }
 
@@ -243,9 +245,10 @@ class CartItem implements Arrayable, Jsonable
      *
      * @param int|string $id
      */
-    public static function fromAttributes(int|string $id, string $name, Money $price, int $qty = 1, int $weight = 0, ?CartItemOptions $options = null) : self
+    public static function fromAttributes(int|string $id, string $name, Money $price, int $qty = 1, int $weight = 0, ?CartItemOptions $options = null): self
     {
         $options = $options ?: new CartItemOptions([]);
+
         return new self($id, $name, $price, $qty, $weight, $options);
     }
 
@@ -269,7 +272,7 @@ class CartItem implements Arrayable, Jsonable
             'discount' => self::formatMoney($this->discount()),
             'subtotal' => self::formatMoney($this->subtotal()),
             'tax'      => self::formatMoney($this->tax()),
-            'total' => self::formatMoney($this->total()),
+            'total'    => self::formatMoney($this->total()),
         ];
     }
 
@@ -284,22 +287,22 @@ class CartItem implements Arrayable, Jsonable
     {
         return json_encode($this->toArray(), $options);
     }
-    
+
     /**
      * Generate a unique id for the cart item.
      */
-    private static function formatMoney(Money $money) : string
+    private static function formatMoney(Money $money): string
     {
         return (new DecimalMoneyFormatter(new ISOCurrencies()))->format($money);
     }
-    
+
     /**
      * Generate a unique id for the cart item.
      */
-    protected function generateRowId(string $id, array $options) : string
+    protected function generateRowId(string $id, array $options): string
     {
         ksort($options);
 
-        return md5($id . serialize($options));
+        return md5($id.serialize($options));
     }
 }

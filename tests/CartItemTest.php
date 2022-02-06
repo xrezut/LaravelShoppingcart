@@ -5,9 +5,9 @@ namespace Gloudemans\Tests\Shoppingcart;
 use Gloudemans\Shoppingcart\CartItem;
 use Gloudemans\Shoppingcart\CartItemOptions;
 use Gloudemans\Shoppingcart\ShoppingcartServiceProvider;
-use Orchestra\Testbench\TestCase;
-use Money\Money;
 use Money\Currency;
+use Money\Money;
+use Orchestra\Testbench\TestCase;
 
 class CartItemTest extends TestCase
 {

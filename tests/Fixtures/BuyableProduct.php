@@ -2,11 +2,11 @@
 
 namespace Gloudemans\Tests\Shoppingcart\Fixtures;
 
-use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Gloudemans\Shoppingcart\CartItemOptions;
+use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
-use Money\Money;
 use Money\Currency;
+use Money\Money;
 
 class BuyableProduct extends Model implements Buyable
 {
@@ -48,7 +48,7 @@ class BuyableProduct extends Model implements Buyable
      *
      * @return string
      */
-    public function getBuyableDescription(CartItemOptions $options) : ?string
+    public function getBuyableDescription(CartItemOptions $options): ?string
     {
         return $this->name;
     }

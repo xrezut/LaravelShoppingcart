@@ -2,9 +2,8 @@
 
 namespace Gloudemans\Shoppingcart;
 
-use Gloudemans\Shoppingcart\CartItemOptions;
-use Money\Money;
 use Money\Currency;
+use Money\Money;
 
 trait CanBeBought
 {
@@ -25,13 +24,13 @@ trait CanBeBought
     {
         if (($name = $this->getAttribute('name'))) {
             return $name;
-        } else if (($title = $this->getAttribute('title'))) {
+        } elseif (($title = $this->getAttribute('title'))) {
             return $title;
-        } else if (($description = $this->getAttribute('description'))) {
+        } elseif (($description = $this->getAttribute('description'))) {
             return $description;
         } else {
             return null;
-        }        
+        }
     }
 
     /**

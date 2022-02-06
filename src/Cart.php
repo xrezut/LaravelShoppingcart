@@ -2,11 +2,8 @@
 
 namespace Gloudemans\Shoppingcart;
 
-use Closure;
-use InvalidArgumentException;
 use Carbon\Carbon;
-use Money\Money;
-use Money\Currency;
+use Closure;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Gloudemans\Shoppingcart\Contracts\InstanceIdentifier;
 use Gloudemans\Shoppingcart\Exceptions\CartAlreadyStoredException;
@@ -17,8 +14,11 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Traits\Macroable;
+use InvalidArgumentException;
+use Money\Currency;
+use Money\Money;
 
 class Cart
 {
@@ -116,36 +116,36 @@ class Cart
     {
         /* Allow adding a CartItem by raw parameters */
         if (is_int($id) || is_string($id)) {
-            if (! is_null($nameOrQty) && ! is_string($nameOrQty)) {
+            if (!is_null($nameOrQty) && !is_string($nameOrQty)) {
                 throw new InvalidArgumentException('$nameOrQty must be of type string (name) or null when adding with raw parameters');
             }
-            
-            if (! is_null($qtyOrOptions) && ! is_int($qtyOrOptions)) {
+
+            if (!is_null($qtyOrOptions) && !is_int($qtyOrOptions)) {
                 throw new InvalidArgumentException('$nameOrQty must be of type int (quantity) or null when adding with raw parameters');
             }
-            
+
             return $this->addCartItem(CartItem::fromAttributes($id, $nameOrQty, $price, $qtyOrOptions ?: 1, $weight ?: 0, $options ?: new CartItemOptions([])));
         }
         /* Also allow passing a Buyable instance, get data from the instance rather than parameters */
-        else if ($id instanceof Buyable) {
-            if (! is_null($qtyOrOptions) && ! is_int($nameOrQty)) {
+        elseif ($id instanceof Buyable) {
+            if (!is_null($qtyOrOptions) && !is_int($nameOrQty)) {
                 throw new InvalidArgumentException('$nameOrQty must be of type int (quantity) when adding a Buyable instance');
             }
-            
-            if (! is_null($qtyOrOptions) && ! $qtyOrOptions instanceof CartItemOptions) {
+
+            if (!is_null($qtyOrOptions) && !$qtyOrOptions instanceof CartItemOptions) {
                 throw new InvalidArgumentException('$qtyOrOptions must be of type CartItemOptions (options) or null when adding a Buyable instance');
             }
-            
+
             $cartItem = CartItem::fromBuyable($id, $nameOrQty ?: 1, $qtyOrOptions ?: new CartItemOptions([]));
 
             if ($id instanceof Model) {
                 $cartItem->associate($id);
             }
-            
+
             return $this->addCartItem($cartItem);
         }
         /* Also allow passing multiple definitions at the same time, simply call same method and collec return value */
-        else if (is_array($id)) {
+        elseif (is_array($id)) {
             /* Check if this iterable contains instances */
             if (is_array(head($id)) || head($id) instanceof Buyable) {
                 return array_map(function (Buyable|iterable $item) {
@@ -155,7 +155,7 @@ class Cart
             /* Treat the array itself as an instance */
             else {
                 $cartItem = CartItem::fromArray($id);
-                
+
                 return $this->addCartItem($cartItem);
             }
         }
@@ -178,8 +178,8 @@ class Cart
     public function addCartItem(CartItem $item, bool $keepDiscount = false, bool $keepTax = false, bool $dispatchEvent = true): CartItem
     {
         $item->setInstance($this->currentInstance());
-        
-        if (! $keepDiscount) {
+
+        if (!$keepDiscount) {
             $item->setDiscount($this->discount);
         }
 
@@ -363,7 +363,7 @@ class Cart
         if ($calculated instanceof Money) {
             return $calculated;
         } else {
-            throw new \TypeError("Calculated price is not an instance of Money");
+            throw new \TypeError('Calculated price is not an instance of Money');
         }
     }
 
@@ -381,7 +381,7 @@ class Cart
         if ($calculated instanceof Money) {
             return $calculated;
         } else {
-            throw new \TypeError("Calculated discount is not an instance of Money");
+            throw new \TypeError('Calculated discount is not an instance of Money');
         }
     }
 
@@ -397,10 +397,10 @@ class Cart
         if ($calculated instanceof Money) {
             return $calculated;
         } else {
-            throw new \TypeError("Calculated subtotal is not an instance of Money");
+            throw new \TypeError('Calculated subtotal is not an instance of Money');
         }
     }
-    
+
     /**
      * Get the total tax of the items in the cart.
      */
@@ -427,7 +427,7 @@ class Cart
         if ($calculated instanceof Money) {
             return $calculated;
         } else {
-            throw new \TypeError("Calculated total is not an instance of Money");
+            throw new \TypeError('Calculated total is not an instance of Money');
         }
     }
 
@@ -443,7 +443,7 @@ class Cart
         if (is_int($calculated)) {
             return $calculated;
         } else {
-            throw new \TypeError("Calculated weight was not an integer");
+            throw new \TypeError('Calculated weight was not an integer');
         }
     }
 

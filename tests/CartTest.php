@@ -3,8 +3,6 @@
 namespace Gloudemans\Tests\Shoppingcart;
 
 use Carbon\Carbon;
-use Money\Money;
-use Money\Currency;
 use Gloudemans\Shoppingcart\Cart;
 use Gloudemans\Shoppingcart\CartItem;
 use Gloudemans\Shoppingcart\CartItemOptions;
@@ -15,6 +13,8 @@ use Gloudemans\Tests\Shoppingcart\Fixtures\Identifiable;
 use Gloudemans\Tests\Shoppingcart\Fixtures\ProductModel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
+use Money\Currency;
+use Money\Money;
 use Orchestra\Testbench\TestCase;
 
 class CartTest extends TestCase
@@ -31,7 +31,7 @@ class CartTest extends TestCase
     protected function getPackageProviders($app)
     {
         return [
-            ShoppingcartServiceProvider::class
+            ShoppingcartServiceProvider::class,
         ];
     }
 
@@ -525,7 +525,7 @@ class CartTest extends TestCase
         ]));
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
-        
+
         $this->assertEquals(new Money(1000, $cartItem->price->getCurrency()), $cartItem->price());
         $this->assertEquals(new Money(1000, $cartItem->price->getCurrency()), $cartItem->subtotal());
         $this->assertEquals(new Money(210, $cartItem->price->getCurrency()), $cartItem->tax());
@@ -547,7 +547,7 @@ class CartTest extends TestCase
                 'options'  => [],
                 'discount' => '0.00',
                 'weight'   => 0,
-                
+
             ],
             '370d08585360f5c568b18d1f2e4ca1df' => [
                 'rowId'    => '370d08585360f5c568b18d1f2e4ca1df',
@@ -1009,7 +1009,7 @@ class CartTest extends TestCase
         $this->assertEquals(new Money(1000, new Currency('USD')), $cartItem->price);
         $this->assertEquals(new Money(1000, new Currency('USD')), $cartItem->discount());
         $this->assertEquals(new Money(1000, new Currency('USD')), $cartItem->subtotal());
-        $this->assertEquals(new Money(190, new Currency('USD')),  $cartItem->tax());
+        $this->assertEquals(new Money(190, new Currency('USD')), $cartItem->tax());
         $this->assertEquals(new Money(1190, new Currency('USD')), $cartItem->total());
     }
 
