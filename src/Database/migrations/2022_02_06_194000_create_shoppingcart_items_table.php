@@ -11,7 +11,7 @@ class CreateShoppingcartItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Config::get('cart.database.table'), function (Blueprint $table) {
+        Schema::create(Config::get('cart.database.tables.cart_item'), function (Blueprint $table) {
             $table->timestamps();
         });
     }
@@ -21,6 +21,6 @@ class CreateShoppingcartItemsTable extends Migration
      */
     public function down()
     {
-        Schema::drop(Config::get('cart.database.table'));
+        Schema::drop(Config::get('cart.database.tables.cart_item'));
     }
 }
