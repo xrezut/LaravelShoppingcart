@@ -527,6 +527,7 @@ class CartTest extends TestCase
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
         $this->assertEquals(0.21, $cartItem->taxRate);
         $this->assertEquals(0.21, $cartItem->taxRate);
+        $this->assertEquals(new Money(210, $cartItem->price->getCurrency()), $cartItem->tax());
 
         $content = $cart->content();
 
