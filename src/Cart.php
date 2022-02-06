@@ -525,13 +525,8 @@ class Cart
 
     /**
      * Set the discount rate for the cart item with the given rowId.
-     *
-     * @param string    $rowId
-     * @param int|float $taxRate
-     *
-     * @return void
      */
-    public function setDiscount(string $rowId, $discount): void
+    public function setDiscount(string $rowId, float|Money $discount): void
     {
         $cartItem = $this->get($rowId);
 

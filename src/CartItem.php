@@ -180,9 +180,11 @@ class CartItem implements Arrayable, Jsonable
      */
     public function discount(): Money
     {
+        $price = $this->price();
         if ($this->discount instanceof Money) {
             return $this->price()->subtract($this->discount);
         } else {
+            $result = $this->price()->multiply($this->discount, Config::get('cart.rounding', Money::ROUND_UP));
             return $this->price()->multiply($this->discount, Config::get('cart.rounding', Money::ROUND_UP));
         }
     }
@@ -193,7 +195,8 @@ class CartItem implements Arrayable, Jsonable
      */
     public function subtotal(): Money
     {
-        return Money::max(new Money(0, $this->price()->getCurrency()), $this->price()->add($this->discount()));
+        $subtotal = $this->price()->add($this->discount());
+        return Money::max(new Money(0, $this->price->getCurrency()), $this->price()->subtract($this->discount()));
     }
 
     /**
@@ -201,7 +204,8 @@ class CartItem implements Arrayable, Jsonable
      */
     public function tax(): Money
     {
-        return $this->subtotal()->multiply($this->taxRate + 1, Config::get('cart.rounding', Money::ROUND_UP));
+        $tax = $this->subtotal()->multiply($this->taxRate, Config::get('cart.rounding', Money::ROUND_UP));
+        return $this->subtotal()->multiply($this->taxRate, Config::get('cart.rounding', Money::ROUND_UP));
     }
 
     /**
