@@ -71,6 +71,16 @@ class CartTest extends TestCase
     }
 
     /** @test */
+    public function i_am_not_insane()
+    {
+        $cart = $this->getCart();
+
+        $price = new Money(1000, new Currency('USD'));
+
+        $this->assertEquals(new Money(210, new Currency('USD')), $price->multiply(0.21));
+    }
+
+    /** @test */
     public function it_has_a_default_instance()
     {
         $cart = $this->getCart();
@@ -532,7 +542,7 @@ class CartTest extends TestCase
         $this->assertEquals(0.21, $cartItem->taxRate);
         $this->assertEquals(new Money(210, $cartItem->price->getCurrency()), $cartItem->subtotal()->multiply($cartItem->taxRate), config('cart.rounding', Money::ROUND_UP), 'Could not calculate tax manually');
         $this->assertEquals(new Money(210, $cartItem->price->getCurrency()), $cartItem->tax(), 'Could not calculate tax on CartItem');
-        $this->assertEquals(new Money(1200, $cartItem->price->getCurrency()), $cartItem->total());
+        $this->assertEquals(new Money(1210, $cartItem->price->getCurrency()), $cartItem->total());
 
         $content = $cart->content();
 
