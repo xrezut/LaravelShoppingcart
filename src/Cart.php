@@ -743,7 +743,7 @@ class Cart
      */
     private static function getTableName(): string
     {
-        return Config::get('cart.database.table', 'shoppingcart');
+        return Config::get('cart.database.tables.cart', 'cart');
     }
 
     /**
