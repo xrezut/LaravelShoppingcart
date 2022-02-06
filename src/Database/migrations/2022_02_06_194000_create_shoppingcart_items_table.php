@@ -25,7 +25,7 @@ class CreateShoppingcartItemsTable extends Migration
 
             /* The price of the CartItem */
             $table->unsignedBigInteger('price')->nullable();
-            $table->unsignedFloat('discount_rate')->nullable();
+            $table->float('discount_rate')->nullable();
             $table->unsignedBigInteger('discount_fixed')->nullable();
             $table->float('taxRate')->nullable();
 
