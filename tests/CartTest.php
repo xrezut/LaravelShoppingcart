@@ -530,7 +530,8 @@ class CartTest extends TestCase
         $this->assertEquals(new Money(1000, $cartItem->price->getCurrency()), $cartItem->subtotal());
         $this->assertEquals(0.21, config('cart.tax'));
         $this->assertEquals(0.21, $cartItem->taxRate);
-        $this->assertEquals(new Money(210, $cartItem->price->getCurrency()), $cartItem->tax());
+        $this->assertEquals(new Money(210, $cartItem->price->getCurrency()), $cartItem->subtotal()->multiply($cartItem->taxRate), config('cart.rounding', Money::ROUND_UP), 'calculate tax manually');
+        $this->assertEquals(new Money(210, $cartItem->price->getCurrency()), $cartItem->tax(), 'calculate tax on CartItem');
         $this->assertEquals(new Money(1200, $cartItem->price->getCurrency()), $cartItem->total());
 
         $content = $cart->content();
