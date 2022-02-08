@@ -41,7 +41,7 @@ class CartModel extends Model
     public function price(): Attribute
     {
         return new Attribute(
-            get: fn (): Money => {
+            get: fn (): Money {
                 $sum = new Money(0, 'USD');
              
                 foreach (this->items as $item) {
@@ -61,7 +61,7 @@ class CartModel extends Model
     public function discount(): Attribute
     {
         return new Attribute(
-            get: fn (): Money => {
+            get: fn (): Money {
                 $sum = new Money(0, 'USD');
              
                 foreach (this->items as $item) {
@@ -80,7 +80,7 @@ class CartModel extends Model
     public function subtotal(): Attribute
     {
         return new Attribute(
-            get: fn (): Money => {
+            get: fn (): Money {
                 $sum = new Money(0, 'USD');
              
                 foreach (this->items as $item) {
@@ -98,7 +98,7 @@ class CartModel extends Model
     public function tax(): Attribute
     {
         return new Attribute(
-            get: fn (): Money => {
+            get: fn (): Money {
                 $sum = new Money(0, 'USD');
              
                 foreach (this->items as $item) {
@@ -116,7 +116,7 @@ class CartModel extends Model
     public function total(): Attribute
     {
         return new Attribute(
-            get: fn (): Money => {
+            get: fn (): Money {
                 $sum = new Money(0, 'USD');
              
                 foreach (this->items as $item) {
@@ -134,7 +134,7 @@ class CartModel extends Model
     public function weight(): Attribute
     {
         return new Attribute(
-            get: fn (): int => {
+            get: fn (): int {
                 $sum = 0;
              
                 foreach (this->items as $item) {
