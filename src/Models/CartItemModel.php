@@ -45,4 +45,15 @@ class CartItemModel extends Model
     {
         return $this->belongsTo(CartModel::class, 'cart_id');
     }
+ 
+     /**
+     * This will is the price of the CartItem as Money
+     */
+    public function price(): Attribute
+    {
+        return new Attribute(
+            get: fn (int $value) => new Money($value),
+            set: fn (Money $value) => $value,
+        );
+    }
 }
