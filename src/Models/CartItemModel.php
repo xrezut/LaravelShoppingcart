@@ -47,25 +47,36 @@ class CartItemModel extends Model
         return $this->belongsTo(CartModel::class, 'cart_id');
     }
  
-     /**
+    /**
      * This will is the price of the CartItem as Money
      */
     public function price(): Attribute
     {
         return new Attribute(
-            get: fn (int $value) => new Money($value),
-            set: fn (Money $value) => $value,
+            get: fn (int $value): Money => new Money($value),
+            set: fn (Money $value): int => $value,
         );
     }
-
+ 
     /**
-     * This will is the price of the CartItem considering the set quantity. If you need the single
-     * price just set the parameter to true.
+     * This will is the price of the CartItem as Money
      */
-    public function priceAll(): Attribute
+    public function discountRate(): Attribute
     {
         return new Attribute(
-            get: fn () => $this->price->multiply($this->qty),
+            get: fn (float $value): float => $value,
+            set: fn (float $value): float => $value,
+        );
+    }
+ 
+     /**
+     * This will is the price of the CartItem as Money
+     */
+    public function discountFixed(): Attribute
+    {
+        return new Attribute(
+            get: fn (int $value): Money => new Money($value),
+            set: fn (Money $value): int => $value,
         );
     }
 
@@ -77,11 +88,11 @@ class CartItemModel extends Model
     public function discount(): Attribute
     {
         return new Attribute(
-            get: fn () => {
-                if ($this->discount instanceof Money) {
-                    return $this->price_all->subtract($this->discount)
+            get: fn ($value, $attributes): Money => {
+                if (! $attributes['discount_fixed']) {
+                    return $attribute['price_all']->subtract($attributes['discount_fixed'])
                 } else {
-                    return $this->price_all->multiply(sprintf('%.14F', $this->discount), Config::get('cart.rounding', Money::ROUND_UP)),
+                    return $attribute['price_all']->multiply(sprintf('%.14F', $attributes['discount_rate']), Config::get('cart.rounding', Money::ROUND_UP)),
                 }
             },
         );
@@ -94,7 +105,7 @@ class CartItemModel extends Model
     public function subtotal(): Attribute
     {
         return new Attribute(
-            get: fn () => Money::max(new Money(0, $this->price->getCurrency()), $this->price()->subtract($this->discount())),
+            get: fn ($value, $attributes): Money => Money::max(new Money(0, $attribute['price']->getCurrency()), $attribute['price']->subtract($attribute['discount'])),
         );
     }
 
@@ -104,7 +115,7 @@ class CartItemModel extends Model
     public function tax(): Attribute
     {
         return new Attribute(
-            get: fn () => $this->subtotal()->multiply(sprintf('%.14F', $this->taxRate), Config::get('cart.rounding', Money::ROUND_UP)),
+            get: fn ($value, $attributes): Money => $attribute['subtotal']->multiply(sprintf('%.14F', $attribute['tax_rate']), Config::get('cart.rounding', Money::ROUND_UP)),
         );
     }
 
@@ -114,7 +125,7 @@ class CartItemModel extends Model
     public function total(): Attribute
     {
         return new Attribute(
-            get: fn () => $this->subtotal()->add($this->tax()),
+            get: fn (): Money => $this->subtotal()->add($this->tax()),
         );
     }
 
@@ -124,7 +135,7 @@ class CartItemModel extends Model
     public function totalWeight(): Attribute
     {
         return new Attribute(
-            get: fn () => $this->qty * $this->weight,
+            get: fn ($value, $attributes): int => $attributes['qty'] * $attributes['weight'],
         );
     }
 }
