@@ -24,7 +24,7 @@ class CartModel extends Model
     protected $fillable = [
       'identifier',
       'instance',
-      'discount_rate'
+      'tax_rate'
     ];
   
     /**
