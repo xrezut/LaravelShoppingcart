@@ -38,6 +38,14 @@ class CartItemModel extends Model
     protected $casts = [
         'options' => 'array', // Stored as JSON string, cast to array
     ];
+ 
+    /**
+     * Get the parent commentable model (post or video).
+     */
+    public function model()
+    {
+        return $this->morphTo();
+    }
   
     /**
      * Get the CartItems for the cart.
