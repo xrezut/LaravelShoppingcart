@@ -88,7 +88,7 @@ class CartItemModel extends Model
     public function discount(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes): Money {
+            get: function ($value, $attributes): Money {
                 if (! $attributes['discount_fixed']) {
                     return $attribute['price_all']->subtract($attributes['discount_fixed'])
                 } else {
