@@ -19,9 +19,12 @@ class CreateShoppingcartItemsTable extends Migration
             /* Relation CartItem to Cart */
             $table->unsignedBigInteger('cart_id');
             $table->foreign('cart_id')->references('id')->on(Config::get('cart.database.tables.cart'));
-
+            
             /* Make id and rowid primary so there can not be duplicates */
             $table->primary(['cart_id', 'row_id']);
+            
+            /* Columns required for the morphTo relationship being the id and FQCN of the model */
+            $table->morphs('model');
 
             /* The price of the CartItem */
             $table->unsignedBigInteger('price')->nullable();
