@@ -134,7 +134,15 @@ class CartModel extends Model
     public function weight(): Attribute
     {
         return new Attribute(
-            get: fn () => $this->qty * $this->weight,
+            get: fn (): int => {
+                $sum = 0;
+             
+                foreach (this->items as $item) {
+                    $sum += $this->qty * $this->weight;
+                }
+             
+                return $sum;
+            },
         );
     }
 }
