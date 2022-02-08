@@ -26,6 +26,13 @@ class CartModel extends Model
       'instance',
       'tax_rate'
     ];
+ 
+     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['items'];
   
     /**
      * Get the CartItems for the cart.
