@@ -90,9 +90,9 @@ class CartItemModel extends Model
         return new Attribute(
             get: function ($value, $attributes): Money {
                 if (! $attributes['discount_fixed']) {
-                    return $attribute['price_all']->subtract($attributes['discount_fixed'])
+                    return $attribute['price_all']->subtract($attributes['discount_fixed']);
                 } else {
-                    return $attribute['price_all']->multiply(sprintf('%.14F', $attributes['discount_rate']), Config::get('cart.rounding', Money::ROUND_UP)),
+                    return $attribute['price_all']->multiply(sprintf('%.14F', $attributes['discount_rate']), Config::get('cart.rounding', Money::ROUND_UP));
                 }
             },
         );
