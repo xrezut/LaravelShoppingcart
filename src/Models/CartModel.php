@@ -12,7 +12,7 @@ class CartModel extends Model
      *
      * @var string
      */
-    protected $table = Config::get('cart.database.tables.cart_item');
+    protected $table = Config::get('cart.database.tables.cart');
   
     /**
      * The attributes that are mass assignable.
@@ -20,22 +20,8 @@ class CartModel extends Model
      * @var array
      */
     protected $fillable = [
-      'row_id',
-      'cart_id',
-      'price',
-      'discount_rate',
-      'discount_fixed',
-      'taxRate',
-      'options'
-    ];
-  
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'options' => 'array', // Stored as JSON string, cast to array
+      'identifier',
+      'instance',
     ];
   
     /**
