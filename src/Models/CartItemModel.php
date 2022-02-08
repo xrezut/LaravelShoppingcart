@@ -5,7 +5,7 @@ namespace Gloudemans\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
  
-class CartModel extends Model
+class CartItemModel extends Model
 {
     /**
      * The table associated with the model.
