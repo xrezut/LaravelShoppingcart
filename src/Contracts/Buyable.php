@@ -32,5 +32,5 @@ interface Buyable
     /**
      * Get the taxRate of the Buyable item.
      */
-    public function getBuyableTaxRate(CartItemOptions $options): float
+    public function getBuyableTaxRate(CartItemOptions $options): float;
 }
