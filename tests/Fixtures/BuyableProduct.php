@@ -68,4 +68,9 @@ class BuyableProduct extends Model implements Buyable
     {
         return $this->weight;
     }
+
+    public function getBuyableTaxRate(CartItemOptions $options): float
+    {
+        return $this->tax_rate;
+    }
 }
