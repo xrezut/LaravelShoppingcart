@@ -28,9 +28,9 @@ interface Buyable
      * Get the weight of the Buyable item.
      */
     public function getBuyableWeight(CartItemOptions $options): int;
-    
+
     /**
      * Get the taxRate of the Buyable item.
      */
-    public function getBuyableTaxRate(CartItemOptions $options): float
+    public function getBuyableTaxRate(CartItemOptions $options): float;
 }
