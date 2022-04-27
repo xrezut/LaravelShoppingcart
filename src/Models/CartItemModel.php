@@ -22,7 +22,6 @@ class CartItemModel extends Model
     protected $fillable = [
       'row_id',
       'cart_id',
-      'price',
       'qty',
       'discount_rate',
       'discount_fixed',
